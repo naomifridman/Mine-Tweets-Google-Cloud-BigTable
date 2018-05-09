@@ -1,34 +1,37 @@
 
-# What people from different locations, Tweet ?
+# Mining Tweet About BigData ?
 ### Collect the words people Tweet, when they Tweet about BigData
-Find most frequent words in Tweets about a given subject in different location.
-How Tweets differ in What People in different places Tweet about ?
-## Big data course, Mid term Project
-### Naomi Fridman 014370704
+Find highest frequency words among Tweets about, for example, BigData in different locations.
 
 ## Project goals:
-#### Project goal is to find the most popular word in Tweet about BigData from different locations. In the same way, you can analize tweets about any subject.
-#### Full project contais Hadoop MapReduce word count and top n words wich will process the collected words from Tweeter.
-### In this python file, we:
+#### Project goal is to findinf most popular word in Tweet's about a given subject, and compare the results from different locations. I used BigData as an example, and added a political view analyzis as well :). In the same way, you can analize tweets about any subject.
+
+#### The repository contais Hadoop MapReduce word count and top n words functionality, to process the collected words from Tweeter. Here we use Python Collection library, for demonstration.
+### In this Python notebook, we:
 * Implement Tweets retrieving, according to a given query.
 * Reserch Tweet data structure.
 * Reserch Tweets location issues.
 * Implement word tokenizing and filtering.
 
-#### Packages that we need to install and import are:
-
-  * **NumPy**: This is the fundamental package for scientific computing with Python. Besides its obvious scientific uses, NumPy can also be used as an efficient multi-dimensional container of generic data.<br>
-  * **Pandas**: This is an open source library providing high-performance, easy-to-use data structures and data analysis tools.
-  * **Tweepy**: This is an easy-to-use Python library for accessing the Twitter API.<br>
-  * **nltk** : Python NLP library for tokenizing tweeter text
+#### Files in directory:
+    *  mine_tweet_by_content_and_location.ipynb - Python notebook to play around with retrieving tweets about different issues, and view the ,ost popular words in the Tweet's according to location.
+    * collect_tweets_to_file.py - Python script for to mine Tweets about BigData, and save the tokenized filtered words in to a text file.<br>
+##### Usage example: 
+    python collect_tweets_to_file.py NY "New York" NEWYORK Newyork NewYork<br>
+Will retrive all tweets about Bigdata, that the location associated with it has any of the location words.<br>
+As explained bellow, we filter location according to authour location files, which is a free text.<br>
+output will be:<br>
+Retreiving tweets since:  2018-4-10  about BigData   Tweeted in locations:  NY<br>
+669  Words collected and saved in  NY\tweets_from_NY.txt
+   
 
 
 ```python
 import numpy as np
 import pandas as pd
-import tweepy
+import tweepy   #Python library for accessing the Twitter API.
 
-import nltk
+import nltk     #Python NLP library for tokenizing tweeter text
 nltk.download('punkt')
 ```
 
