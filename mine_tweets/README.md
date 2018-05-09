@@ -14,10 +14,11 @@ Find highest frequency words among Tweets about, for example, BigData in differe
 * Implement word tokenizing and filtering.
 
 #### Files in directory:
-    *  mine_tweet_by_content_and_location.ipynb - Python notebook to play around with retrieving tweets about different issues, and view the ,ost popular words in the Tweet's according to location.
-    * collect_tweets_to_file.py - Python script for to mine Tweets about BigData, and save the tokenized filtered words in to a text file.<br>
+
+* mine_tweet_by_content_and_location.ipynb - Python notebook to play around with retrieving tweets about different issues, and view the ,ost popular words in the Tweet's according to location.
+* collect_tweets_to_file.py - Python script for to mine Tweets about BigData, and save the tokenized filtered words in to a text file.<br>
 ##### Usage example: 
-    python collect_tweets_to_file.py NY "New York" NEWYORK Newyork NewYork<br>
+python collect_tweets_to_file.py NY "New York" NEWYORK Newyork NewYor<br>
 Will retrive all tweets about Bigdata, that the location associated with it has any of the location words.<br>
 As explained bellow, we filter location according to authour location files, which is a free text.<br>
 output will be:<br>
