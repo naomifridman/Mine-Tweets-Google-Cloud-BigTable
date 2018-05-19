@@ -7,9 +7,9 @@ Example repository:
 `https://github.com/GoogleCloudPlatform/cloud-bigtable-examples/tree/master/java/dataproc-wordcount`
 
 ## Step1. Before you begin
-Create and configure you GCP account and resources. In the following link have all information to do:
+Create and configure you GCP account and resources. In the following link have all information to do:<br>
 
-https://cloud.google.com/bigtable/docs/quickstart-hbase#before_you_start
+https://cloud.google.com/bigtable/docs/quickstart-hbase#before_you_start<br>
 #### Create Google Cloud account
 Follow the link above, "before you start" to create Google cloud account.<br>
 Accept term of service.<br>
@@ -35,7 +35,7 @@ For this MapReduce example, you need to Enable:
 
 ## Step 2. Create BigTable Cluster
 **A Cloud BigTable instance is a container for up to two Cloud BigTable clusters.**<br>
-GCP menu->BigTable->create instance
+GCP menu->BigTable->create instance<br>
 Reference: https://cloud.google.com/bigtable/docs/creating-instance
 * Choose instance name: for example - naomi-mapreduce-bigtable
 * Write down the Instance id: for example - naomi-mapreduce-bigtable
