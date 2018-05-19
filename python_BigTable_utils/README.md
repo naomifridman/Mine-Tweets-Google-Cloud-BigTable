@@ -48,7 +48,7 @@ virtualenv env
 source env/bin/activate
 #deactivate env
 ```
-You can also install needed packages as superuser with sudo. This is just a learning example, so I chose to work as super user.<br>
+You can also install needed packages as superuser with sudo. <br>
 Install Python libraries for Google cloud storage
 
 
@@ -56,13 +56,11 @@ Install Python libraries for Google cloud storage
 
 https://cloud.google.com/bigtable/docs/samples-python-hello-happybase<br>
 
-create requirements.txt file, which contain the following line:
+install python packages needed for working with BigTable:
 ```
-google-cloud-happybase==0.26.0
-```
-Now run:
-```
-sudo pip install -r requirements.txt
+pip install google-cloud
+pip install google-cloud-happybase
+pip install google-cloud-dataproc
 ```
 Now all needed Python libraries, should be installed.<br>
 To check, run:
@@ -74,11 +72,11 @@ You should see something like:
 google-api-core==0.1.4
 google-auth==1.4.1
 google-cloud-bigtable==0.26.0
-google-cloud-core==0.28.1
+google-cloud-core==0.26.0
+google-cloud-dataproc==0.1.0
 google-cloud-happybase==0.26.0
 google-cloud-storage==1.10.0
 google-cloud-vision==0.29.0
-google-compute-engine==2.7.5
 google-gax==0.15.16
 google-resumable-media==0.3.1
 googleapis-common-protos==1.5.3
@@ -119,6 +117,11 @@ After creating the table object:
 table = connection.table(table_name)
 ```
 ## Utilities and Usage
+clone the git and cd to folder:
+```
+git clone https://github.com/naomifridman/Top-N-Words-In-Tweets-Google-Cloud.git
+cd Top-N-Words-In-Tweets-Google-Cloud/python_BigTable_utils
+```
 #### words_to_HBase_table_in_BigTable.py 
 Python script that creates a BigTable table, and insert into the created table a list of words.<br>
 `usage: words_to_HBase_table_in_BigTable.py [-h] [--table TABLE] project_id instance_id`<br>
