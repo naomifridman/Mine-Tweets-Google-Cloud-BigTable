@@ -1,102 +1,123 @@
-# code is cpied from hadoop tutorials at:
-# https://hadoop.apache.org/docs/stable/hadoop-mapreduce-client/hadoop-mapreduce-client-core/MapReduceTutorial.html
+/**https://github.com/GoogleCloudPlatform/cloud-bigtable-examples/tree/master/java/dataproc-wordcount/src/main/java/com/example/bigtable/sample
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+//package com.example.bigtable.sample;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.StringTokenizer;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.hbase.HBaseConfiguration;
+import org.apache.hadoop.hbase.TableName;
+import org.apache.hadoop.hbase.client.Put;
+import org.apache.hadoop.hbase.io.ImmutableBytesWritable;
+import org.apache.hadoop.hbase.mapreduce.TableMapReduceUtil;
+import org.apache.hadoop.hbase.mapreduce.TableReducer;
+import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
-import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
-import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.hadoop.util.GenericOptionsParser;
 
+/**
+ * Writes the same results of WordCount to a new table
+ */
 public class WordCountHBase {
 
-  /* public static class TokenizerMapper
-       extends Mapper<Object, Text, Text, IntWritable>{
+  final static Log LOG = LogFactory.getLog(WordCountHBase.class);
+
+  public static final byte[] COLUMN_FAMILY = "cf1".getBytes();
+  public static final byte[] COUNT_COLUMN_NAME = "count".getBytes();
+
+  /*public static class TokenizerMapper extends
+      Mapper<Object, Text, ImmutableBytesWritable, IntWritable> {
 
     private final static IntWritable one = new IntWritable(1);
-    private Text word = new Text();
 
-    public void map(Object key, Text value, Context context
-                    ) throws IOException, InterruptedException {
+    @Override
+    public void map(Object key, Text value, Context context) throws IOException,
+        InterruptedException {
       StringTokenizer itr = new StringTokenizer(value.toString());
+      ImmutableBytesWritable word = new ImmutableBytesWritable();
       while (itr.hasMoreTokens()) {
-        word.set(itr.nextToken());
+        word.set(Bytes.toBytes(itr.nextToken()));
         context.write(word, one);
       }
     }
-  } */
-  public static class MyMapper extends TableMapper<Text, IntWritable>  {
+  }*/
+
+  //////
+    public static class MyMapper extends TableMapper<Text, IntWritable>  {
 
 	private final IntWritable ONE = new IntWritable(1);
    	private Text text = new Text();
 
    	public void map(ImmutableBytesWritable row, Result value, Context context) throws IOException, InterruptedException {
-        	String val = new String(value.getValue(Bytes.toBytes("cf"), Bytes.toBytes("attr1")));
+        	String val = new String(value.getValue(Bytes.toBytes("cf1"), Bytes.toBytes("attr1")));
           	text.set(val);     // we can only emit Writables...
 
         	context.write(text, ONE);
    	}
   }
   
- 
-  /*public static class IntSumReducer
-       extends Reducer<Text,IntWritable,Text,IntWritable> {
-    private IntWritable result = new IntWritable();
+  //////
+  public static class MyTableReducer extends
+      TableReducer<ImmutableBytesWritable, IntWritable, ImmutableBytesWritable> {
 
-    public void reduce(Text key, Iterable<IntWritable> values,
-                       Context context
-                       ) throws IOException, InterruptedException {
-      int sum = 0;
-      for (IntWritable val : values) {
-        sum += val.get();
-      }
-      result.set(sum);
-      context.write(key, result);
+    @Override
+    public void reduce(ImmutableBytesWritable key, Iterable<IntWritable> values, Context context)
+        throws IOException, InterruptedException {
+      int sum = sum(values);
+      Put put = new Put(key.get());
+      put.addColumn(COLUMN_FAMILY, COUNT_COLUMN_NAME, Bytes.toBytes(sum));
+      context.write(null, put);
     }
-  }*/
 
-  public static class MyTableReducer extends TableReducer<Text, IntWritable, ImmutableBytesWritable>  {
-
- 	public void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
-    		int i = 0;
-    		for (IntWritable val : values) {
-    			i += val.get();
-    		}
-    		Put put = new Put(Bytes.toBytes(key.toString()));
-    		put.add(Bytes.toBytes("cf"), Bytes.toBytes("count"), Bytes.toBytes(i));
-
-    		context.write(null, put);
-   	}
+    public int sum(Iterable<IntWritable> values) {
+      int i = 0;
+      for (IntWritable val : values) {
+        i += val.get();
+      }
+      return i;
+    }
   }
-  public static void main(String[] args) throws Exception {
-	  /*
-    Configuration conf = new Configuration();
-    Job job = Job.getInstance(conf, "word count");
-	
-    job.setJarByClass(WordCount.class);
-    job.setMapperClass(TokenizerMapper.class);
-    job.setCombinerClass(IntSumReducer.class);
-    job.setReducerClass(IntSumReducer.class);
-    job.setOutputKeyClass(Text.class);
-    job.setOutputValueClass(IntWritable.class);
-	
-    FileInputFormat.addInputPath(job, new Path(args[0]));
-    FileOutputFormat.setOutputPath(job, new Path(args[1]));
-	
-    System.exit(job.waitForCompletion(true) ? 0 : 1);*/
-	
-	//**********************
-	
-	Configuration config = HBaseConfiguration.create();
-	Job job = new Job(config,"ExampleSummary");
-	job.setJarByClass(MySummaryJob.class);     // class that contains mapper and reducer
 
+  public static void main(String[] args) throws Exception {
+    Configuration conf = HBaseConfiguration.create();
+    String[] otherArgs = new GenericOptionsParser(conf, args).getRemainingArgs();
+    if (otherArgs.length < 2) {
+      System.err.println("Usage: wordcount-hbase <in> [<in>...] <table-name>");
+      System.exit(2);
+    }
+
+    Job job = Job.getInstance(conf, "word count hbase");
+
+    /*for (int i = 0; i < otherArgs.length - 1; ++i) {
+      FileInputFormat.addInputPath(job, new Path(otherArgs[i]));
+    }*/
+
+	// Input table
 	Scan scan = new Scan();
 	scan.setCaching(500);        // 1 is the default in Scan, which will be bad for MapReduce jobs
 	scan.setCacheBlocks(false);  // don't set to true for MR jobs
@@ -109,14 +130,22 @@ public class WordCountHBase {
 		Text.class,         // mapper output key
 		IntWritable.class,  // mapper output value
 		job);
-	TableMapReduceUtil.initTableReducerJob(
-		targetTable,        // output table
-		MyTableReducer.class,    // reducer class
-		job);
-	job.setNumReduceTasks(1);   // at least one, adjust as required
-
-	System.exit(job.waitForCompletion(true) ? 0 : 1);
 		
-  
+	// create output table
+    TableName tableName = TableName.valueOf("wordcount_table") //otherArgs[otherArgs.length - 1]);
+    try {
+      CreateTable.createTable(tableName, conf,
+          Collections.singletonList(Bytes.toString(COLUMN_FAMILY)));
+    } catch (Exception e) {
+      LOG.error("Could not create the table.", e);
+    }
+
+    job.setJarByClass(WordCountHBase.class);
+    job.setMapperClass(MyMapper.class);
+    job.setMapOutputValueClass(IntWritable.class);
+
+    TableMapReduceUtil.initTableReducerJob(tableName.getNameAsString(), MyTableReducer.class, job);
+
+    System.exit(job.waitForCompletion(true) ? 0 : 1);
   }
 }
