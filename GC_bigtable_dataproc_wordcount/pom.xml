@@ -1,9 +1,12 @@
 <!--
    Copyright 2015 Google, Inc.
+
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at
+
        http://www.apache.org/licenses/LICENSE-2.0
+
    Unless required by applicable law or agreed to in writing, software
    distributed under the License is distributed on an "AS IS" BASIS,
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -11,22 +14,12 @@
    limitations under the License.set -x -e
 -->
 <project>
-  <modelVersion>1.0.0</modelVersion>
+  <modelVersion>4.0.0</modelVersion>
 
-  <groupId>gc_bigtable_dataproc</groupId>
+  <groupId>com.example.bigtable</groupId>
   <artifactId>wordcount-mapreduce</artifactId>
   <version>1.0</version>
   <packaging>jar</packaging>
-
-  <!-- Parent POM defines common plugins and properties.
-       TODO: use the parent when this sample passes checkstyles.
-       See: https://github.com/GoogleCloudPlatform/cloud-bigtable-examples/issues/59
-  <parent>
-    <groupId>com.google.cloud</groupId>
-    <artifactId>bigtable-samples</artifactId>
-    <version>1.0.0</version>
-    <relativePath>..</relativePath>
-  </parent> -->
 
   <properties>
     <bigtable.projectID>naomi-topnwords</bigtable.projectID>
@@ -50,6 +43,8 @@
   </dependencies>
 
   <build>
+    
+
     <resources>
         <resource>
             <directory>src_java</directory>
@@ -75,7 +70,7 @@
           </descriptorRefs>
           <archive>
             <manifest>
-                <mainClass>gc_bigtable_dataproc.WordCountDriver</mainClass>
+                <mainClass>com.example.bigtable.sample.WordCountDriver</mainClass>
             </manifest>
           </archive>
         </configuration>
