@@ -1,4 +1,4 @@
-# Google Cloud SetUp For running BigTable DataProc Examples
+# Google Cloud SetUp For running BigTable DataProc WordCount MapReduce Examples on VM
 
 I am a data scientist building and running deep learning models in Python. Although I have decent computer with NVIDIA Gpu's, Its not enough for training segmentation models as UNet's on large images. So I started explore cloud computation solutions, Mainly Amazon AWS and Google Cloud.<br>
 I started my research on Google Cloud, with the example below. I must confess that it took me longer time then expected, and involved a lot of try and error. So I decided it will be a good idea to write short guides to each step. Here is complete total beginner guide to the first setup step of Google Cloud environment. <br>
@@ -63,14 +63,14 @@ Reference: https://cloud.google.com/iam/docs/quickstart
 * In IMA page, make sure your project is selected
 * Add yourself as member, Choose owner type.
 * Choose edit in member menu, and get dialog to add roles. Add the following Roles: 
-* * App Engine Admin
-* * Project Billing Manager
-* * BigTable Administrator
-* * Compute Admin
-* * DataProc Editor
-* * Project Owner
-* * Storage Admin
-* * Logging Admin
+* ##*App Engine Admin
+* Project Billing Manager
+* BigTable Administrator
+* Compute Admin
+* DataProc Editor
+* Project Owner
+* Storage Admin
+* Logging Admin
 
 ## Step 5. Open VM Instance SSH
 GCP menu -> Compute engine -> VM instance
