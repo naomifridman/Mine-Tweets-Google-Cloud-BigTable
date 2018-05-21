@@ -7,7 +7,8 @@ Example repository:
 `https://github.com/GoogleCloudPlatform/cloud-bigtable-examples/tree/master/java/dataproc-wordcount`
 
 ## Step1. Before you begin
-Create and configure you GCP account and resources. In the following link have all information to do:<br>
+Create and configure you GCP account and resources. In the following link original example guide:<br>
+working in VM instance is slightly different.
 
 https://cloud.google.com/bigtable/docs/quickstart-hbase#before_you_start<br>
 #### Create Google Cloud account
@@ -85,8 +86,8 @@ gcloud init
 You will be asked to confirm: account, project and choose default zone.<br>
 If some needed application, wasn't enables, you will be asked to enable it now.
 <br>
-Now you can install Java, Python and run the examples or write your own.
+Now continue  install Java, Python and run the examples or write your own.
 
 
 ## Step 7. Credentials
-In all example tutorials, an authentication process us needed. But if you work from VM instance, as we do in this example, all authentication is done automatically.
+In all example tutorials, an authentication process is needed. But if you work from VM instance, as we do in this example, all authentication is done automatically.
