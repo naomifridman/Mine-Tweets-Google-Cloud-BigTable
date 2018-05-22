@@ -1,0 +1,103 @@
+<!--
+   Copyright 2015 Google, Inc.
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+       http://www.apache.org/licenses/LICENSE-2.0
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.set -x -e
+-->
+<project>
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>topn</groupId>
+  <artifactId>topn-mapreduce</artifactId>
+  <version>1.0</version>
+  <packaging>jar</packaging>
+
+
+  <properties>
+    <bigtable.projectID>naomi-topnwords</bigtable.projectID>
+    <bigtable.instanceID>naomi-mapreduce-bigtable</bigtable.instanceID>
+
+    <bigtable.version>1.0.0</bigtable.version>
+
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <maven.compiler.source>1.8</maven.compiler.source>
+
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.build.outputEncoding>UTF-8</project.build.outputEncoding>
+  </properties>
+	
+  <repositories>
+    <repository>
+      <id>snapshots-repo</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+      <releases><enabled>false</enabled></releases>
+      <snapshots><enabled>true</enabled></snapshots>
+    </repository>
+  </repositories>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.google.cloud.bigtable</groupId>
+      <artifactId>bigtable-hbase-mapreduce</artifactId>
+      <version>${bigtable.version}</version>
+    </dependency>
+	
+	<dependency>
+    <groupId>org.apache.zookeeper</groupId>
+    <artifactId>zookeeper</artifactId>
+    <version>3.4.6</version>
+
+    <exclusions>
+       <exclusion> 
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-log4j12</artifactId>
+       </exclusion>
+    </exclusions> 
+    </dependency>
+
+  </dependencies>
+
+  <build>
+    
+
+
+  
+  
+    <plugins>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+                <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <descriptorRefs>
+              <!-- This tells Maven to include all dependencies -->
+              <descriptorRef>jar-with-dependencies</descriptorRef>
+          </descriptorRefs>
+		  
+
+		  
+          <archive>
+            <manifest>
+			    <addClasspath>true</addClasspath>
+                <mainClass>topn.WordCountHBase</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+		
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
