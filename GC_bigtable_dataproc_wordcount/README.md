@@ -155,7 +155,7 @@ gcloud dataproc jobs submit hadoop --cluster naomi-mapreduce-bigtable \
     gs://lesv-big-public-data/books/book \
     gs://lesv-big-public-data/books/b6130 \
     "words-count"
-
+```
 On succsefull run, you should see somthing like:
 ```
 - name: word count
