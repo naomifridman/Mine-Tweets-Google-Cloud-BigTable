@@ -166,7 +166,11 @@ Output table is: words-count
 ```
 ## Step 8. view the results
 In GCP boser menue at: GCP > Dataproc > Jobs, you can see the log of the project's job.<br>
-To View the results, you need to use  hbase shell. Install it from the original example:
+To View the results, you have 2 choices:
+* Hhbase shell. 
+* Use pythgon tools
+### HBase Shell
+Install it from the original example:<br>
 https://cloud.google.com/bigtable/docs/quickstart-hbase <br>
 ```
 cd
@@ -222,6 +226,28 @@ Exit the HBase shell:
 ```
 exit
 ```
+### python tools
+Use the python utils from this git. 
+```
+cd
+cd Top-N-Words-In-Tweets-Google-Cloud/python_BigTable_utils/
+python base_table_head.py --table "words-count" naomi-topnwords naomi-mapreduce-bigtable
+```
+Output, in bytes:
+```
+'!),', {'cf:count': '\x00\x00\x00\x01'})
+('!=', {'cf:count': '\x00\x00\x00\t'})
+('!=),', {'cf:count': '\x00\x00\x00\x01'})
+('!=,', {'cf:count': '\x00\x00\x00\x01'})
+('!probationary</pre></div></td>', {'cf:count': '\x00\x00\x00\x01'})
+('"', {'cf:count': '\x00\x00\x00\xf4'})
+('""', {'cf:count': '\x00\x00\x00\x01'})
+('"%5$s"</code>}', {'cf:count': '\x00\x00\x00\x01'})
+('"&#8230;&#8203;number', {'cf:count': '\x00\x00\x00\x01'})
+('"&lt;html&gt;&#8230;&#8203;"</p></td>', {'cf:count': '\x00\x00\x00\x06'})
+```
+You can edit the python utilities, for scpecific column_family, to output int values and not bytes.
+
 
 ## Clean up
 There is a cleaning script in the example:
