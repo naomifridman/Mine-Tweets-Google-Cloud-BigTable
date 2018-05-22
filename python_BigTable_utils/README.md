@@ -58,7 +58,7 @@ https://cloud.google.com/bigtable/docs/samples-python-hello-happybase<br>
 
 install python packages needed for working with BigTable:
 ```
-pip install google-cloud
+pip install google-cloud-storage
 pip install google-cloud-happybase
 pip install google-cloud-dataproc
 ```
