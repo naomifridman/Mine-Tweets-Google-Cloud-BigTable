@@ -166,19 +166,34 @@ Output table is: words-count
 ```
 ## Step 8. view the results
 In GCP boser menue at: GCP > Dataproc > Jobs, you can see the log of the project's job.<br>
-To View the results, you need to use  hbase shell. Information here:
+To View the results, you need to use  hbase shell. Install it from the original example:
 https://cloud.google.com/bigtable/docs/quickstart-hbase <br>
 ```
-cd $HOME/cloud-bigtable-examples/quickstart
-./quickstart.sh
+cd
+git clone https://github.com/GoogleCloudPlatform/cloud-bigtable-examples.git
+cd cloud-bigtable-examples/quickstart/
+./quickstart.sh 
 ```
 
 Few basic hbase shell comands:<br>
-* `list` - List the tables
-* `scan "table name"` - output the table content
-* `describe "table name"` - output table description
-* Type `exit` and press Enter to exit the HBase shell. You will see a series of log messages after you exit, which is normal.
-* 'count "table name" - will give you somthing like:
+List the tables:
+```
+list
+```
+To output the table content:
+```
+scan
+```
+output table description:
+```
+describe "table name"
+```
+
+Count rows in table, will also print a rowa once in 1000 raes:
+```
+count "table name
+```
+Will output somthing like:
 ```
 Current count: 121000, row: vainest                                                                               
 Current count: 122000, row: vitae,                                                                                
@@ -186,10 +201,12 @@ Current count: 123000, row: wearing.
 Current count: 124000, row: will'd)                                                                               
 Current count: 125000, row: wound,)                                                                               
 125778 row(s) in 0.9430 seconds
-
-=> 125778
 ```
-* `scan "table name" ,{RAW => true, LIMIT =>5}` will output 5 rows. In this project we got:
+Output 5 rows of the table:
+```
+scan "table name" ,{RAW => true, LIMIT =>5} 
+```
+will Output:
 ```
 ROW                           COLUMN+CELL                                                                         
  !),                          column=cf:count, timestamp=1525727576042, value=\x00\x00\x00\x01                    
@@ -200,7 +217,11 @@ ROW                           COLUMN+CELL
  d>                                                                                                               
 5 row(s) in 0.2130 seconds
 ```
-
+The data is saves in bytes, 
+Exit the HBase shell:
+```
+exit
+```
 
 ## Clean up
 There is a cleaning script in the example:
