@@ -126,7 +126,8 @@ gcloud dataproc clusters create "naomi-mapreduce-bigtable" \
     --master-machine-type n1-standard-2 \
     --worker-machine-type n1-standard-2
 ```
-Or run:
+Minimum workers for mapreduce are 2.
+Or run with script:
 ```
 chmod a+x cluster.sh 
 ./cluster.sh create naomi-bucket
@@ -141,7 +142,6 @@ View the created cluster, in GCP console:
 ![DataProc Cluster](https://raw.githubusercontent.com/naomifridman/Top-N-Words-In-Tweets-Google-Cloud/master/assets/GCP_console_dataproc_clusters.png)<br>
 
 ## Step 7. Run MapReduce word count BigTable DataProc example
-```
 As before, we can run the actual job, from `cluster.sh' or manually from command line:
 ```
 #./cluster.sh start  <your BigTable instance> 
@@ -156,6 +156,7 @@ gcloud dataproc jobs submit hadoop --cluster naomi-mapreduce-bigtable \
     gs://lesv-big-public-data/books/b6130 \
     "words-count"
 ```
+Where, gs://name are list of input public files, wordcount-hbase is the main class and last parameter is the output HBase table.
 On succsefull run, you should see somthing like:
 ```
 - name: word count
