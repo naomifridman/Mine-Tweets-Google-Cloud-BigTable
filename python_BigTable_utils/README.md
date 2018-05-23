@@ -21,7 +21,6 @@ Or you can use or use the following Google documentation:
 `https://cloud.google.com/bigtable/docs/quickstart-hbase#before_you_start`<br>
 Generally steps are:
 * create project, enable billing, enable Google API's
-* Create BigTable Cluster.
 * Create connect and open in browser, VM instance.
 * Initialize Google cloud
 
@@ -31,7 +30,6 @@ In your vm instance, after initializing Google cloud, do:
 ```
 sudo apt update
 sudo apt install python python-dev python3 python3-dev
-wget https://bootstrap.pypa.io/get-pip.py
 sudo python get-pip.py
 # check
 pip --version
