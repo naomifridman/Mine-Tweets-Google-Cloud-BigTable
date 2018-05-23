@@ -1,54 +1,29 @@
 # How I managed to run MapReduce Google Cloude Java Example 
 
-As a data scientists, in constant need of computation resources, I started my tour in Google cloud, with the known MapReduce WordCount BigTable DataProc example. I found deploying and running this example, took longer then expected, So I thought that writing short guides to each step will be practical. First step is setting up the project in Google Cloud Platform, and opening VM instance.
+As a data scientists, in constant need of computation resources, I started my tour in Google cloud, with the known MapReduce WordCount BigTable DataProc example. I found deploying and running this example, took longer then expected. So I forked the example to my git, made some small modifications, and wrote few short guides for each step. <br>
 Example repository:https://github.com/GoogleCloudPlatform/cloud-bigtable-examples/tree/master/java/dataproc-wordcount
 
-## Step 1. Before you begin
-Create and configure you GCP account and resources. In the following link have detailed walk through guide to set up project in Google Cloud Platform, GCP:
-https://github.com/naomifridman/Top-N-Words-In-Tweets-Google-Cloud/blob/master/GC_bigtable_sexample_guide.md
+## Step 1. Set up GCP, Open VM and install Java and Python
+Create and configure you GCP account and resources. Walk through begginer guide to set up project in Google Cloud Platform, GCP:<br>
+https://github.com/naomifridman/Top-N-Words-In-Tweets-Google-Cloud/blob/master/GC_bigtable_sexample_guide.md???
 
-Rougthly steps are:
-* Create Google Cloud account, enable billing and Google Cloud APIs
-Pay attention: choose "Individual" in account type.*<br>
+Steps are:
+* Create Google Cloud account (choose "Individual"), enable billing and Google Cloud APIs
 * Select or create a GCP project.
-* Enable the Google Cloud APIs in GCP->API & Services->Dushboard<br>
-Make sure your project is selected<br>
-For this MapReduce example, you need to Enable:
-* Compute Engine API
-* Cloud Bigtable API
-* Cloud Bigtable Table Admin API
-* Google Cloud Dataproc API
-Save project parameters:<br>
+* Enable Google Cloud APIs in GCP->API & Services->Dushboard<br>, or choose enable all APi's in VM creation.
+* initilize project parameters with: `gcloud init`
+* Install Java, Haddop, Maven
+<br>
+Write down project parameters:<br>
 * Zone: us-east1-c
 * Project id: naomi-topnwords
-* Instance id: naomi-mapreduce-bigtable
-## Credentials
+* Cluster id: naomi-mapreduce-bigtable
+#### Credentials
 When working in VM opened in browser from GCP, credentials and authentication are done under the cover.
-  
-## Step 2. Install Java
-In your VM SSH, do the following:
-```
-sudo apt-get update
-sudo add-apt-repository ppa:webupd8team/java
-sudo apt-get update
-sudo apt-get install oracle-java8-installer
-sudo apt-get update
-sudo apt-get install oracle-java8-set-default
- ```
-To check installation:
-```
-java -version
-```
-Check environment variable path:
-```
-echo $JAVA_HOME 
-```
-If its not set, check that java is in /usr/lib/jvm/java-8-oracle and:
-```
-export JAVA_HOME=/usr/lib/jvm/java-8-oracle
-sudo apt-get update -y
-```
-## Step 3. Create Project storage
+#### Google SDK 
+in already installed on the VM instance.
+
+## Step 2. Create Project storage
 You need to create Buckets for data storage of the project.<br>
 You can create them in GCP console menu:
 * GCP -> Storage -> Browser
@@ -64,24 +39,8 @@ gsutil defacl set public-read gs://naomi-bucket
 ```
 You can give any unique name to the Bucket.
 
-## Step 4. Install Maven and Hadoop
-Install Apache Maven, Project managment tool
-```
-sudo apt-get install maven
-```
-Install hadoop
-```
-cd
-wget www-eu.apache.org/dist/hadoop/common/hadoop-3.1.0/hadoop-3.1.0.tar.gz
-tar xzf hadoop-3.1.0.tar.gz
-```
-Now you have hadoop-3.1.0 directory in your home. hadoop-3.1.0/bin/hadoop is the binary. Add it to path.
-```
-cd
-mv hadoop-3.1.0 hadoop
-export PATH="$PATH:$HOME/hadoop/bin"
-```
-## Step 5. Clone and Configure MapRduce example.
+
+## Step 3. Clone and Configure MapRduce example.
 Since it was tedious to configure the original example, I copied it to my git, and made some modifications.
 Clone mt modified example:
 ```
@@ -100,7 +59,7 @@ You should see something like this:
 [INFO] Final Memory: 73M/753M
 [INFO] ------------------------------------------------------------------------
 ```
-## Step 6. Deploy MapReduce Example
+## Step 4. Deploy MapReduce Example
 #### Create Google Cloud DataProc cluster
 This cluster, is the one asctually runing the jobs. We need to create DataProc cluster, with same features as the BigTable cluster, otherwise the job will fail.<br>
 You can create the DataProc xluster in few ways:
@@ -141,7 +100,7 @@ Created [https://dataproc.googleapis.com/v1/projects/naomi-mapreduce/regions/glo
 View the created cluster, in GCP console:
 ![DataProc Cluster](https://raw.githubusercontent.com/naomifridman/Top-N-Words-In-Tweets-Google-Cloud/master/assets/GCP_console_dataproc_clusters.png)<br>
 
-## Step 7. Run MapReduce word count BigTable DataProc example
+## Step 5. Run MapReduce word count BigTable DataProc example
 As before, we can run the actual job, from `cluster.sh' or manually from command line:
 ```
 #./cluster.sh start  <your BigTable instance> 
@@ -165,7 +124,7 @@ On succsefull run, you should see somthing like:
   trackingUrl: http://naomi-mapreduce-bigtable-m:8088/proxy/application_1525724630856_0001/
 Output table is: words-count
 ```
-## Step 8. view the results
+## Step 6. view the results
 In GCP boser menue at: GCP > Dataproc > Jobs, you can see the log of the project's job.<br>
 To View the results, you have 2 choices:
 * Hhbase shell. 
@@ -247,7 +206,7 @@ Output, in bytes:
 ('"&#8230;&#8203;number', {'cf:count': '\x00\x00\x00\x01'})
 ('"&lt;html&gt;&#8230;&#8203;"</p></td>', {'cf:count': '\x00\x00\x00\x06'})
 ```
-You can edit the python utilities, for scpecific column_family, to output int values and not bytes.
+You can edit the python utilities, for scpecific column_family, to output int values and not byte strings.
 
 
 ## Clean up
