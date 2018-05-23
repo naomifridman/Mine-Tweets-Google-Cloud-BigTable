@@ -34,20 +34,7 @@ For this MapReduce example, you need to Enable:
 * Google Cloud DataProc API
 * Cloud BigTable Admin API
 
-## Step 2. Create BigTable Cluster
-**A Cloud BigTable instance is a container for up to two Cloud BigTable clusters.**<br>
-GCP menu->BigTable->create instance<br>
-Reference: https://cloud.google.com/bigtable/docs/creating-instance
-* Choose instance name: for example - naomi-mapreduce-bigtable
-* Write down the Instance id: for example - naomi-mapreduce-bigtable
-* In Instance type: Choose Development
-* In Storage type: Choose SSD
-* You get a Cluster creation Dialog, write down your the cluster info:
-* 	Cluster ID: for example - naomi-mapreduce-bigtable-c1
-* 	Zone: Choose and write down your choice.  Best is to use same zone for all the resources and actions in the project: us-west-1-c
-* 	Select "Done" in Cluster dialog, and Create.
-
-## Step 3. Create VM Instance
+## Step 2. Create VM Instance
 Here you create an instance, and from its SSH you will run the project.<br>
 * GCP menu-> Computing engine->VM instance->create
 * Choose name: vm-instance-1
@@ -57,7 +44,7 @@ Here you create an instance, and from its SSH you will run the project.<br>
 * in Identity and API access: Allow full access to all Cloud APIs
 * In Firewall: allow both access, HTTP and HTTPs
 
-## Step 4. IMA roles
+## Step 3. IMA roles
 Reference: https://cloud.google.com/iam/docs/quickstart
  
 * In IMA page, make sure your project is selected
@@ -72,13 +59,13 @@ Reference: https://cloud.google.com/iam/docs/quickstart
 * Storage Admin
 * Logging Admin
 
-## Step 5. Open VM Instance SSH
+## Step 4. Open VM Instance SSH
 GCP menu -> Compute engine -> VM instance
 From VM instance menu page, Choose SSH, under connect, and Choose "Open browser window".<br>
 ![Open VM Instance](https://raw.githubusercontent.com/naomifridman/Top-N-Words-In-Tweets-Google-Cloud/master/assets/vm_instance.PNG)<br>
 From here on, by default, the instruction related to this SSH.
 
-## Step 6. Initialize Google Cloud
+## Step 5. Initialize Google Cloud
 In your VM instance do the following:
 ```
 gcloud init 
@@ -86,8 +73,47 @@ gcloud init
 You will be asked to confirm: account, project and choose default zone.<br>
 If some needed application, wasn't enables, you will be asked to enable it now.
 <br>
-Now continue  install Java, Python and run the examples or write your own.
 
+## Step 6. Credentials, Google SDK
+When working on VM instance, opened from GCP, as we do in this example, authentication is done automatically. And Google SDK is already instaled.
 
-## Step 7. Credentials
-In all example tutorials, an authentication process is needed. But if you work from VM instance, as we do in this example, all authentication is done automatically.
+## Step 7. Install Java
+In your VM SSH, do the following:
+```
+sudo apt-get update
+sudo add-apt-repository ppa:webupd8team/java
+sudo apt-get update
+sudo apt-get install oracle-java8-installer
+sudo apt-get update
+sudo apt-get install oracle-java8-set-default
+ ```
+To check installation:
+```
+java -version
+```
+Check environment variable path:
+```
+echo $JAVA_HOME 
+```
+If its not set, check that java is in /usr/lib/jvm/java-8-oracle and:
+```
+export JAVA_HOME=/usr/lib/jvm/java-8-oracle
+sudo apt-get update -y
+```
+## Step 4. Install Maven and Hadoop
+Install Apache Maven, Project managment tool
+```
+sudo apt-get install maven
+```
+Install hadoop
+```
+cd
+wget www-eu.apache.org/dist/hadoop/common/hadoop-3.1.0/hadoop-3.1.0.tar.gz
+tar xzf hadoop-3.1.0.tar.gz
+```
+Now you have hadoop-3.1.0 directory in your home. hadoop-3.1.0/bin/hadoop is the binary. Add it to path.
+```
+cd
+mv hadoop-3.1.0 hadoop
+export PATH="$PATH:$HOME/hadoop/bin"
+```
