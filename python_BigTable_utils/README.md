@@ -1,7 +1,7 @@
 # Python Utils To Work with BigTable HBase tables
 
-This branch, contains Python scripts with basic BigTable database tasks. The source is a simple general sketch of how to work with BigTable tables from Python script. There are utils for create table, write data into tables, read data from tables, list and delete tables. The README file, contains a complete bigginer guide for setup Google Cloud project, to run this example, and other python script using BigTable.
-
+This branch, contains Python scripts with basic BigTable database tasks. The source is a simple general sketch of how to work with BigTable tables from Python script. There are utils for create table, write data into tables, read data from tables, list and delete tables. The README file, contains a complete bigginer guide for setup Google Cloud project, to run this example, and other python script using BigTable.<br>
+Reference: http://happybase.readthedocs.io/en/latest/user.html
 
 ## Working with Google Cloud Data Base
 There are 2 Google Cloud APIs for working with database: BigTable and BigQuery.<br>
