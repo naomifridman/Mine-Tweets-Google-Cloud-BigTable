@@ -109,13 +109,13 @@ As before, we can run the actual job, from `cluster.sh' or manually from command
 Or run Manually:
 ```
 gcloud dataproc jobs submit hadoop --cluster naomi-mapreduce-bigtable \
-    --jar target/wordcount-mapreduce-0-SNAPSHOT-jar-with-dependencies.jar \
+    --jar target/wordcount-mapreduce-1.0-jar-with-dependencies.jar \
     -- wordcount-hbase \
     gs://lesv-big-public-data/books/book \
     gs://lesv-big-public-data/books/b6130 \
     "words-count"
 ```
-Where, gs://name are list of input public files, wordcount-hbase is the main class and last parameter is the output HBase table.
+Where, gs://name are list of input public files, wordcount-hbase is the main class and last parameter is the output HBase table. In the original example jar file are saved in GC bucket, I changt it to local since I needed to examine it.
 On succsefull run, you should see somthing like:
 ```
 - name: word count
