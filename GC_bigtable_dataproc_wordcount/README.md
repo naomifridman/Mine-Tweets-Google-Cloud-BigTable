@@ -175,9 +175,7 @@ scan "table name" ,{RAW => true, LIMIT =>5}
 ```
 will Output:
 ```
-ROW                           COLUMN+CELL                                                                         
- year.                    column=cf:count, timestamp=1527121091081, value=\x00\x00\x00\x01                                 
- year?                    column=cf:count, timestamp=1527121094736, value=\x00\x00\x00\x01                                   
+ROW                           COLUMN+CELL                                                                                              
  yearly                   column=cf:count, timestamp=1527121094736, value=\x00\x00\x00\x01                                   
  yearn                    column=cf:count, timestamp=1527121103964, value=\x00\x00\x00\x01                       
  years                    column=cf:count, timestamp=1527121103964, value=\x00\x00\x00&                                   
@@ -186,7 +184,16 @@ ROW                           COLUMN+CELL
  d>                                                                                                               
 5 row(s) in 0.2130 seconds
 ```
-The data is saves in bytes, 
+The data in columns is saves in bytes, while the key data is saved as is. We can see that in the Reducer java code:
+```
+public void reduce(ImmutableBytesWritable key, Iterable<IntWritable> values, Context context)
+        throws IOException, InterruptedException {
+      int sum = sum(values);
+      Put put = new Put(key.get());
+      put.addColumn(COLUMN_FAMILY, COUNT_COLUMN_NAME, Bytes.toBytes(sum));
+      context.write(null, put);
+    }
+ ```
 Exit the HBase shell:
 ```
 exit
@@ -196,20 +203,15 @@ Use the python utils from this git.
 ```
 cd
 cd Top-N-Words-In-Tweets-Google-Cloud/python_BigTable_utils/
-python base_table_head.py --table "words-count" naomi-topnwords naomi-mapreduce-bigtable
+python hbase_table_head.py --table "words-count" naomi-topnwords naomi-mapreduce-bigtable
 ```
 Output, in bytes:
 ```
-'!),', {'cf:count': '\x00\x00\x00\x01'})
-('!=', {'cf:count': '\x00\x00\x00\t'})
-('!=),', {'cf:count': '\x00\x00\x00\x01'})
-('!=,', {'cf:count': '\x00\x00\x00\x01'})
-('!probationary</pre></div></td>', {'cf:count': '\x00\x00\x00\x01'})
-('"', {'cf:count': '\x00\x00\x00\xf4'})
-('""', {'cf:count': '\x00\x00\x00\x01'})
-('"%5$s"</code>}', {'cf:count': '\x00\x00\x00\x01'})
-('"&#8230;&#8203;number', {'cf:count': '\x00\x00\x00\x01'})
-('"&lt;html&gt;&#8230;&#8203;"</p></td>', {'cf:count': '\x00\x00\x00\x06'})
+1  word:  "'Tis count:  9
+2  word:  '!=' count:   9
+3  word:  '"(PrefixFilter'  encoded:  2
+4  word:  '"\'Tis' count:   9
+5  word:  '"\'Tuque' count:   1
 ```
 You can edit the python utilities, for scpecific column_family, to output int values and not byte strings.
 
