@@ -275,6 +275,23 @@ Just for fun of comparing, a poorly written script is added that run all the pro
 ```
 run_if_all_together.py
 ```
+You can get for example:
+```
+   NY_freq  NY_words
+0       17         0
+1        1      give
+2        1  pb_curry
+3        1   address
+4        1     shout
+   London_freq London_words
+0            3           co
+1            1       nation
+2            1       school
+3            1       record
+4            1     princess
+```
+// TODO
+Twitter respons is not always reliable. To get more clean tweets, run in a loop on time lap of 16 minutes, and handle all exceptions.
 ## Clean up
 There is a cleaning script in the example:
 ```
