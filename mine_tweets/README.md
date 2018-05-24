@@ -1,10 +1,8 @@
 
-# Mining Tweet About BigData ?
-### Collect the words people Tweet, when they Tweet about something
-Find highest frequency words among Tweets about, for example, BigData in different locations.
-
-## Project goals:
-#### Project goal is to find most popular word in Tweet's about a given subject, and compare the results from different locations. I used "Royal Weding" and "BigData" as example subjects.
+# What people from different places tweet, and they tweet about ... ?
+In this fun python project, I mine tweets about a subject, and compare most frequent words in different locations.
+I Collect the words people Tweet, on a given query, filtered by location, tokenize and strip the text, count words and find 
+highest frequency ones. I used "Royal Weding" and "BigData" as example subjects.
 
 ### Python files in repository
 #### Python notebook to play around with Twitter mining. 
@@ -30,19 +28,21 @@ optional arguments:
 ```
 Query should be written according to Twitter format. Mo processing is done on the query.<br>
 Script is running on 4 locations, you can change it in source, by changing n_time varible.<br>
-Results example:
+Results example, for query: (Royal AND wedding) OR (wedding AND Meghan) OR (Harry AND wedding)
 ```
-
+      NY_words  NY_freq London_words  London_freq
+0         love       27     prince             16
+1        white        5       markle            8
+2       prince        5      youtube            7
+3        house        4   everything            5
+4       markle        4   qfpbyngknq            5
+5        trump        3         find            5
+6     pb_curry        2         love            5
+7           go        2    beautiful            5
+8       newday        2         went            5
+9  independent        2       really            5
 ```
-
-##### Usage example: 
-python collect_tweets_to_file.py NY "New York" NEWYORK Newyork NewYor<br>
-Will retrive all tweets about Bigdata, that the location associated with it has any of the location words.<br>
-As explained bellow, we filter location according to authour location files, which is a free text.<br>
-output will be:<br>
-Retreiving tweets since:  2018-4-10  about BigData   Tweeted in locations:  NY<br>
-669  Words collected and saved in  NY\tweets_from_NY.txt
-   
+# Python Notebook
 
 
 ```python
