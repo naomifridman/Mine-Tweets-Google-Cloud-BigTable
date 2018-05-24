@@ -1,12 +1,12 @@
 
 # Mining Tweet About BigData ?
-### Collect the words people Tweet, when they Tweet about BigData
+### Collect the words people Tweet, when they Tweet about something
 Find highest frequency words among Tweets about, for example, BigData in different locations.
 
 ## Project goals:
-#### Project goal is to findinf most popular word in Tweet's about a given subject, and compare the results from different locations. I used BigData as an example, and added a political view analyzis as well :). In the same way, you can analize tweets about any subject.
+#### Project goal is to find most popular word in Tweet's about a given subject, and compare the results from different locations. I used "Royal Weding" and "BigData" as example subjects.
 
-#### The repository contais Hadoop MapReduce word count and top n words functionality, to process the collected words from Tweeter. Here we use Python Collection library, for demonstration.
+#### The repository Python notebook to plat around with Twitter mining.contais Hadoop MapReduce word count and top n words functionality, to process the collected words from Tweeter. Here we use Python Collection library, for demonstration.
 ### In this Python notebook, we:
 * Implement Tweets retrieving, according to a given query.
 * Reserch Tweet data structure.
