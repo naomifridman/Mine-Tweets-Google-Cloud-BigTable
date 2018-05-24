@@ -11,6 +11,7 @@ Steps are:
 * Create Google Cloud account (choose "Individual"), enable billing and Google Cloud APIs
 * Select or create a GCP project.
 * Enable Google Cloud APIs in GCP->API & Services->Dushboard<br>, or choose enable all APi's in VM creation.
+* Create BigTable cluster, this is your data cluster, write the name.
 * initilize project parameters with: `gcloud init`
 * Install Java, Haddop, Maven
 <br>
@@ -18,8 +19,10 @@ Write down project parameters:<br>
 * Zone: us-east1-c
 * Project id: naomi-topnwords
 * Cluster id: naomi-mapreduce-bigtable
+
 #### Credentials
 When working in VM opened in browser from GCP, credentials and authentication are done under the cover.
+
 #### Google SDK 
 in already installed on the VM instance.
 
@@ -61,8 +64,8 @@ You should see something like this:
 ```
 ## Step 4. Deploy MapReduce Example
 #### Create Google Cloud DataProc cluster
-This cluster, is the one asctually runing the jobs. We need to create DataProc cluster, with same features as the BigTable cluster, otherwise the job will fail.<br>
-You can create the DataProc xluster in few ways:
+This cluster, is the one asctually runing the jobs. We need to create DataProc cluster, with same name as the BigTable cluster, annd same features as the VM you created.<br>
+You can create the DataProc cluster in few ways:
 * GCP Console: GCP->DataProc->Clusters->Create
 * ./cluster.sh create <bucket name>
 * Manualy from command line with Google Cloud SDK
