@@ -198,8 +198,9 @@ Exit the HBase shell:
 ```
 exit
 ```
-### python tools
+### Python tools
 Use the python utils from this git. 
+#### 
 ```
 cd
 cd Top-N-Words-In-Tweets-Google-Cloud/python_BigTable_utils/
@@ -212,6 +213,21 @@ Output, in bytes:
 3  word:  '"(PrefixFilter'  encoded:  2
 4  word:  '"\'Tis' count:   9
 5  word:  '"\'Tuque' count:   1
+```
+####
+```
+$ python3 hbase_table_topn_by_value.py --table 'words-count' naomi-topnwords naomi-mapreduce-bigtable 
+```
+Will outpoy:
+```
+existing tables:  ['words-count']
+Scanning all words in table:  words-count
+column_name  cf:count
+b'the' 20802
+b'to' 7613
+b'of' 7529
+b'and' 7216
+b'<div' 6579
 ```
 You can edit the python utilities, for scpecific column_family, to output int values and not byte strings.
 
@@ -242,16 +258,11 @@ export HADOOP_HOME
 export HADOOP_OPTS="$HADOOP_OPTS -Djava.library.path=$HADOOP_HOME/lib/native"
 
 ```
-## Terminology and Initials
-### Google Cloud BigTable and HBase.
-HBase is a NoSQL database. It is based on Google’s Bigtable distributed storage system – as it is described in Google research paper; “A Bigtable is a sparse, distributed, persistent multi-dimensional sorted map. The map is indexed by a row key, column key, and a timestamp; each value in the map is an uninterpreted array of bytes.” 
-* GCP - Google Cloud Platform
-## Trouble Shooting
 * You don't need to authenticate, but sometimes it solves issues, run:
 ```
 gcloud auth application-default login
 ```
-
-
-
-
+## Terminology and Initials
+### Google Cloud BigTable and HBase.
+HBase is a NoSQL database. It is based on Google’s Bigtable distributed storage system – as it is described in Google research paper; “A Bigtable is a sparse, distributed, persistent multi-dimensional sorted map. The map is indexed by a row key, column key, and a timestamp; each value in the map is an uninterpreted array of bytes.” 
+* GCP - Google Cloud Platform
