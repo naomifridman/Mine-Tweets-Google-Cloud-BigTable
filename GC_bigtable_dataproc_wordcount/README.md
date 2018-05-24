@@ -232,7 +232,49 @@ b'<div' 6579
 ```
 You can edit the python utilities, for scpecific column_family, to output int values and not byte strings.
 
-
+## Step 7 Collect Tweet words with Python
+The python script `collect_tweets_to_csv.py`, retrives tweets from Twitter API, filter them by query and location, and save to txt file. Detailed description abouy tweet mining in the mine_tweet.<br>
+Copy the txt file to a bucket in your storage with GC SDK.
+As example, run, with default query: `(Royal AND wedding) OR (wedding AND Meghan) OR (Harry AND wedding) OR (Harry AND Meghan)`
+and location London, will output:
+```
+      London
+0 royalcentral
+1     princess
+2    charlotte
+3         boss
+4   bridesmaids
+```
+Copy the file to your storage bucket:
+```
+gsutil cp tweet_words.txt gs://naomi-bucket
+```
+## Step 8 High frequency words with MapReduce wordcount on Tweet words
+Run MapReduce on the txt file containing words filtered from tweets:
+```
+'gcloud dataproc jobs submit hadoop --cluster naomi-mapreduce-bigtable \
+    --jar target/wordcount-mapreduce-1.0-jar-with-dependencies.jar \
+    -- wordcount-hbase \
+    gs://naomi-bucket/tweet_words.txt \
+    "tweet-words-count"
+ ```
+ The tweets we retrive is not really a lot, so running the topn python tool will show:
+ ```
+$python3 hbase_table_topn_by_value.py --table 'tweet-words-count' naomi-topnwords naomi-mapreduce-bigtable 
+existing tables:  ['tweet-words-count', 'words-count']
+Scanning all words in table:  tweet-words-count
+column_name  cf:count
+b'princess' 24
+b'like' 18
+b'thank' 9
+b'accepting' 9
+b'bridesmaids' 3
+```
+Step 9. Compare Tweets in different locations
+Just for fun of comparing, a poorly written script is added that run all the proces in a loop on different locations, and presets results for each location. Run with default query and location:
+```
+run_if_all_together.py
+```
 ## Clean up
 There is a cleaning script in the example:
 ```
