@@ -59,13 +59,28 @@ Reference: https://cloud.google.com/iam/docs/quickstart
 * Storage Admin
 * Logging Admin
 
-## Step 4. Open VM Instance SSH
+
+## Step 4. Create BigTable Cluster
+**A Cloud Bigtable instance is a container for up to two Cloud Bigtable clusters.**<br>
+GCP menu->BigTable->create instance
+Reference: https://cloud.google.com/bigtable/docs/creating-instance
+* Choose indtance name: for example - naomi-mapreduce-bigtable
+* Write down the Instance id: for example - naomi-mapreduce-bigtable
+* In Instance type: Choode Development
+* In Storage type: Choose SSD
+* You get a Cluster creation Dialog, write down your the cluster info:
+* 	Cluster ID: for example - naomi-mapreduce-bigtable-c1
+* 	Zone: Choose and write down your choice.  Best is to use same zone for all the resources and actions in the project: us-west-1-c
+* 	Select "Done" in Cluster dialog, and Create.
+Write down the name of the instance, the cluster you will create later in DataProc, must have the same name.
+
+## Step 5. Open VM Instance SSH
 GCP menu -> Compute engine -> VM instance
 From VM instance menu page, Choose SSH, under connect, and Choose "Open browser window".<br>
 ![Open VM Instance](https://raw.githubusercontent.com/naomifridman/Top-N-Words-In-Tweets-Google-Cloud/master/assets/vm_instance.PNG)<br>
 From here on, by default, the instruction related to this SSH.
 
-## Step 5. Initialize Google Cloud
+## Step 6. Initialize Google Cloud
 In your VM instance do the following:
 ```
 gcloud init 
@@ -74,10 +89,10 @@ You will be asked to confirm: account, project and choose default zone.<br>
 If some needed application, wasn't enables, you will be asked to enable it now.
 <br>
 
-## Step 6. Credentials, Google SDK
+## Step 7. Credentials, Google SDK
 When working on VM instance, opened from GCP, as we do in this example, authentication is done automatically. And Google SDK is already instaled.
 
-## Step 7. Install Java
+## Step 8. Install Java
 In your VM SSH, do the following:
 ```
 sudo apt-get update
@@ -100,7 +115,7 @@ If its not set, check that java is in /usr/lib/jvm/java-8-oracle and:
 export JAVA_HOME=/usr/lib/jvm/java-8-oracle
 sudo apt-get update -y
 ```
-## Step 4. Install Maven and Hadoop
+## Step 9. Install Maven and Hadoop
 Install Apache Maven, Project managment tool
 ```
 sudo apt-get install maven
