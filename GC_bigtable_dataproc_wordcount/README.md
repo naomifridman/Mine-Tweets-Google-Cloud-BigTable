@@ -149,7 +149,7 @@ list
 ```
 To output the table content:
 ```
-scan
+scan "table name"
 ```
 output table description:
 ```
@@ -176,11 +176,13 @@ scan "table name" ,{RAW => true, LIMIT =>5}
 will Output:
 ```
 ROW                           COLUMN+CELL                                                                         
- !),                          column=cf:count, timestamp=1525727576042, value=\x00\x00\x00\x01                    
- !=                           column=cf:count, timestamp=1525727564454, value=\x00\x00\x00\x09                    
- !=),                         column=cf:count, timestamp=1525727564580, value=\x00\x00\x00\x01                    
- !=,                          column=cf:count, timestamp=1525727576623, value=\x00\x00\x00\x01                    
- !probationary</pre></div></t column=cf:count, timestamp=1525727567638, value=\x00\x00\x00\x01                    
+ year.                    column=cf:count, timestamp=1527121091081, value=\x00\x00\x00\x01                                 
+ year?                    column=cf:count, timestamp=1527121094736, value=\x00\x00\x00\x01                                   
+ yearly                   column=cf:count, timestamp=1527121094736, value=\x00\x00\x00\x01                                   
+ yearn                    column=cf:count, timestamp=1527121103964, value=\x00\x00\x00\x01                       
+ years                    column=cf:count, timestamp=1527121103964, value=\x00\x00\x00&                                   
+ years'                   column=cf:count, timestamp=1527121094736, value=\x00\x00\x00\x02                                 
+ years)                   column=cf:count, timestamp=1527121103964, value=\x00\x00\x00\x01         
  d>                                                                                                               
 5 row(s) in 0.2130 seconds
 ```
