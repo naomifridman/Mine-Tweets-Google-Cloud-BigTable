@@ -6,17 +6,35 @@ Find highest frequency words among Tweets about, for example, BigData in differe
 ## Project goals:
 #### Project goal is to find most popular word in Tweet's about a given subject, and compare the results from different locations. I used "Royal Weding" and "BigData" as example subjects.
 
-#### The repository Python notebook to plat around with Twitter mining.contais Hadoop MapReduce word count and top n words functionality, to process the collected words from Tweeter. Here we use Python Collection library, for demonstration.
-### In this Python notebook, we:
+### Python files in repository
+#### Python notebook to play around with Twitter mining. 
+Functionality in Python notebook:
 * Implement Tweets retrieving, according to a given query.
 * Reserch Tweet data structure.
 * Reserch Tweets location issues.
 * Implement word tokenizing and filtering.
+#### Python script to mine Tweets by location and subject.
+Usage:<br>
+```
 
-#### Files in directory:
+$ python collect_tweets_to_csv.py -h
+usage: collect_tweets_to_csv.py [-h] [-n LOCATIONS [LOCATIONS ...]] [-q ABOUT]
 
-* mine_tweet_by_content_and_location.ipynb - Python notebook to play around with retrieving tweets about different issues, and view the ,ost popular words in the Tweet's according to location.
-* collect_tweets_to_file.py - Python script for to mine Tweets about BigData, and save the tokenized filtered words in to a text file.<br>
+optional arguments:
+  -h, --help            show this help message and exit
+  -n LOCATIONS [LOCATIONS ...], --locations LOCATIONS [LOCATIONS ...]
+                        (default location: ['NY', 'New York', 'newyork'])
+  -q ABOUT, --about ABOUT
+                        (default Query: (Royal AND wedding) OR (wedding AND
+                        Meghan) OR (Harry AND wedding))
+```
+Query should be written according to Twitter format. Mo processing is done on the query.<br>
+Script is running on 4 locations, you can change it in source, by changing n_time varible.<br>
+Results example:
+```
+
+```
+
 ##### Usage example: 
 python collect_tweets_to_file.py NY "New York" NEWYORK Newyork NewYor<br>
 Will retrive all tweets about Bigdata, that the location associated with it has any of the location words.<br>
