@@ -1,16 +1,9 @@
 #!/usr/bin/env python
 #
-# Code is small modification of this example:
+# Code is a modification of this example:
 #  https://github.com/GoogleCloudPlatform/python-docs-samples/tree/master/bigtable/hello_happybase
 #    
-# Demonstrates how to connect to Cloud Bigtable
-# Create table
-# insert list of words to the table
-# Prerequisites:
-#- Create a Cloud Bigtable cluster.
-#  https://cloud.google.com/bigtable/docs/creating-cluster
-#- Set your Google Application Default Credentials.
-#  https://developers.google.com/identity/protocols/application-default-credentials
+# Demonstrates how to connect to Cloud Bigtable and list the table names in it.
 #
 # usage: list_tables_in_BigTable.py [-h] project_id instance_id
 
