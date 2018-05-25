@@ -164,10 +164,12 @@ def count_and_sort_words(df):
 
     df_results =  []
     # lets count and sort words
+    i = 0;
     for col in df.columns:
        #print('counting and sorting: ', col)
        words = df[col].tolist()
 
+       if len(words) < 1: return df_results
        counts = Counter(words)
        word_list=[]
        freq_list=[]
@@ -186,11 +188,12 @@ def count_and_sort_words(df):
            df1 = pd.DataFrame({re.sub(r'\W+', '', str(col)) + '_words' : word_list,
                               re.sub(r'\W+', '',str(col)) + '_freq':freq_list})
            print('df1',df1.head())
+           print('df_results', df_results)
            df_results = pd.concat([df_results,df1], ignore_index=True, axis=1)
 
            print(df_results.head())
        df_results.fillna(0)
-          
+       i += 1  
     df.fillna(0)
     return df_results
 
@@ -209,7 +212,7 @@ def load_csv_to_bucket(df):
 #=============================================================================================
 from subprocess import call
 if __name__ == '__main__':
-  n_times=1
+  n_times=4
   df = []
   for i in range(n_times):
     
@@ -237,17 +240,19 @@ if __name__ == '__main__':
     print(df.head())
     
     csv_file = df.to_csv('tweet_words.txt', sep=' ', index=False, header=False)
-    #os.system("gsutil cp tweet_words.txt gs://naomi-bucket")
+    os.system("gsutil cp tweet_words.txt gs://naomi-bucket")
       
 	  
-    '''
+    
     run_job = 'gcloud dataproc jobs submit hadoop --cluster naomi-mapreduce-bigtable \
     --jar target/wordcount-mapreduce-1.0-jar-with-dependencies.jar \
     -- wordcount-hbase \
     gs://naomi-bucket/tweet_words.txt \
-    "tweet-words-count"
-  #os.system(run_job)
-  '''
+    \"tweet-words-count\"'
+    os.system(run_job)
+	
+	python_job = python3 hbase_table_head.py --table \'tweet-words-count\' naomi-topnwords naomi-mapreduce-bigtable'
+    os.system(python_job)
   df_results = count_and_sort_words(df.fillna(0))
   print('=======================================================================================')
 
