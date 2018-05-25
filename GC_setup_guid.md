@@ -132,3 +132,35 @@ cd
 mv hadoop-3.1.0 hadoop
 export PATH="$PATH:$HOME/hadoop/bin"
 ```
+## Step 10. Install Python on Google cloud VM instance
+Reference: https://cloud.google.com/python/<br>
+In your vm instance, after initializing Google cloud, do:
+```
+sudo apt update
+sudo apt install python python-dev python3 python3-dev
+sudo python get-pip.py
+# check
+pip --version
+```
+you should see something like this:
+```
+pip 10.0.1 from /usr/local/lib/python2.7/dist-packages/pip (python 2.7)
+```
+To work with python3 you need to install install pip3:
+```
+sudo apt-get update
+sudo apt-get -y install python3-pip
+# Then to verify installation try
+pip3 --help 
+#For checking version :
+pip3 --version 
+```
+Install virtual environment 
+```
+sudo pip install --upgrade virtualenv
+virtualenv env
+source env/bin/activate
+#deactivate env
+```
+You can also install needed packages as superuser with sudo. <br>
+Install Python libraries for Google cloud storage
