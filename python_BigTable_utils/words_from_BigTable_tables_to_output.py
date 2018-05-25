@@ -36,7 +36,7 @@ def main(project_id, instance_id, table_name):
         column_name = '{fam}:words'.format(fam=column_family_name)
         print('column_name ', column_name)
 		
-        for key, row in table.scan():
+        for key, row in table.scan(limit=100):
             #
             # Do your staff here with the words in the table...
             #
