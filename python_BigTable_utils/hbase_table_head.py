@@ -3,16 +3,9 @@
 # Code is small modification of this example:
 #  https://github.com/GoogleCloudPlatform/python-docs-samples/tree/master/bigtable/hello_happybase
 #    
-# Demonstrates how to connect to Cloud Bigtable
-# Create table
-# insert list of words to the table
-# Prerequisites:
-#- Create a Cloud Bigtable cluster.
-#  https://cloud.google.com/bigtable/docs/creating-cluster
-#- Set your Google Application Default Credentials.
-#  https://developers.google.com/identity/protocols/application-default-credentials
+# Demonstrates how to connect to Cloud Bigtable, and print few first rows.
 #
-# usage: words_from_BigTable_tables_to_output.py [-h] [--table TABLE] project_id instance_id
+# usage: hbase_table_head.py [-h] [--table TABLE] project_id instance_id
 
 import argparse
 
@@ -22,8 +15,7 @@ from google.cloud import happybase
 
 def main(project_id, instance_id, table_name):
     # [START connecting_to_bigtable]
-    # The client must be created with admin=True because it will create a
-    # table.
+    # The client must be created with admin=True because it will create atable.
     client = bigtable.Client(project=project_id, admin=True)
     instance = client.instance(instance_id)
     connection = happybase.Connection(instance=instance)
@@ -38,29 +30,20 @@ def main(project_id, instance_id, table_name):
         table = connection.table(table_name)
 
         # [START scanning_all_rows]
-        print('Scanning all words in table: ', table_name)
+        print('Scanning 10 rows from table: ', table_name)
 
         
         column_name = '{fam}:count'.format(fam=column_family_name)
         print('column_name ', column_name)
 		
         i = 0
-        for key, row in table.scan(limit=40):
-            #
-            # Do your staff here with the words in the table...
-            # For simplycity, we just print them to stdout
-            #if (i>=5): 
-            #     break
-            i += 1
-            #print('\t{}: {}'.format(key, row[column_name.encode('utf-8')]))
-            #print(i, key, row)
-            #print(i, row[b'cf:count']) 
-            #print('\t{}: {}'.format(key, row[column_name.encode('utf-8')]))
-    
-            #print('little', 'word: ', key, 'orig: ', row[b'cf:count'], ' encoded: ', int.from_bytes(row[b'cf:count'], byteorder='little'))    
-            print(i, ' word: ', key.decode("utf-8"),  'count: ', int.from_bytes(row[b'cf:count'], byteorder='big'))
+        for key, row in table.scan(limit=10):
+           
             
-        # [END scanning_all_rows]
+            print(i, ' word: ', key.decode("utf-8"),  'count: ', int.from_bytes(row[b'cf:count'], byteorder='big'))
+	    i += 1
+            
+        # [END scanning rows]
 
         # [START deleting_a_table]
         #print('Deleting the {} table.'.format(table_name))
