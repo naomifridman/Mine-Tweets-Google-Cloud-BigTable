@@ -1,7 +1,7 @@
 # How I managed to run MapReduce Google Cloude Example 
 ## And run it on words from Twitter collected by Python script
 
-As a data scientists, in constant need of computation resources, I started my tour in Google cloud, with the known MapReduce WordCount BigTable DataProc example. I found deploying and running this example, took longer then expected. So I forked the example to my git, made some small modifications, and wrote few short guides for each step. <br>
+As a data scientists, in constant need of computation resources, I started my tour in Google cloud, with the known MapReduce WordCount BigTable DataProc example. Since I found deploying and running this example, take longer then expected, I forked the example to my git, made some small modifications, and wrote few short guides for each step. <br>
 Example repository:https://github.com/GoogleCloudPlatform/cloud-bigtable-examples/tree/master/java/dataproc-wordcount
 
 ## Step 1. Set up GCP, Open VM and install Java and Python
@@ -25,7 +25,7 @@ Write down project parameters:<br>
 When working in VM opened in browser from GCP, credentials and authentication are done under the cover.
 
 #### Google SDK 
-in already installed on the VM instance.
+When working from VM opend via Google Cloud Platform, Google SDK for Java and Python, are already installed.
 
 ## Step 2. Create Project storage
 You need to create Buckets for data storage of the project.<br>
