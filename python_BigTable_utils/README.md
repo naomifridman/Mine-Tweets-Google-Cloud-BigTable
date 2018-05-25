@@ -15,7 +15,7 @@ To access database from Python code, we use HappyBase which is a Python client l
 
 ## Before you begin
 You need to setup a Google Cloud project. You can follow the walk through guide here:<br>
-https://github.com/naomifridman/Top-N-Words-In-Tweets-Google-Cloud/blob/master/GoogleCloudSetUpForrunningBigTableDataProcExamples.md'<br>
+https://github.com/naomifridman/Top-N-Words-In-Tweets-Google-Cloud/blob/master/GC_setup_guid.md<br>
 Or you can use or use the following Google documentation:
 
 `https://cloud.google.com/bigtable/docs/quickstart-hbase#before_you_start`<br>
@@ -38,7 +38,15 @@ you should see something like this:
 ```
 pip 10.0.1 from /usr/local/lib/python2.7/dist-packages/pip (python 2.7)
 ```
-
+To work with python3 you need to install install pip3:
+```
+sudo apt-get update
+sudo apt-get -y install python3-pip
+# Then to verify installation try
+pip3 --help 
+#For checking version :
+pip3 --version 
+```
 Install virtual environment 
 ```
 sudo pip install --upgrade virtualenv
