@@ -6,7 +6,7 @@
 # Demonstrates how to connect to Cloud Bigtable, and get the words with highest frequency
 # The code is suitable to a specific table scheme created by mapreduce wordcount process.
 #
-# usage: hbase_table_topn_by_value [-h] [--table TABLE] project_id instance_id
+# usage: python hbase_table_topn_by_value.py [-h] [--table TABLE] project_id instance_id
 
 import argparse
 
