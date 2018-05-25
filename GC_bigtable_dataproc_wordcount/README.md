@@ -1,12 +1,11 @@
 # How I managed to run MapReduce Google Cloude Example 
 ## And run it on words from Twitter collected by Python script
-
-As a data scientists, in constant need of computation resources, I started my tour in Google cloud, with the known MapReduce WordCount BigTable DataProc example. Since I found deploying and running this example, take longer then expected, I forked the example to my git, made some small modifications, and wrote few short guides for each step. <br>
+Let's start the Google cloud tour, with running the famous  MapReduce WordCount BigTable DataProc example. I found that deploying and running this example, took longer then expected. So I forked the example to my git, made some small modifications, and wrote few short guides for each step. <br>
 Example repository:https://github.com/GoogleCloudPlatform/cloud-bigtable-examples/tree/master/java/dataproc-wordcount
 
 ## Step 1. Set up GCP, Open VM and install Java and Python
 Create and configure you GCP account and resources. Walk through begginer guide to set up project in Google Cloud Platform, GCP:<br>
-https://github.com/naomifridman/Top-N-Words-In-Tweets-Google-Cloud/blob/master/GC_bigtable_sexample_guide.md???
+https://github.com/naomifridman/Top-N-Words-In-Tweets-Google-Cloud/blob/master/GC_setup_guid.md
 
 Steps are:
 * Create Google Cloud account (choose "Individual"), enable billing and Google Cloud APIs
@@ -15,6 +14,7 @@ Steps are:
 * Create BigTable cluster, this is your data cluster, write the name.
 * initilize project parameters with: `gcloud init`
 * Install Java, Haddop, Maven
+* Install Python, and Python clients for Google Cloud storage.
 <br>
 Write down project parameters:<br>
 * Zone: us-east1-c
@@ -25,7 +25,7 @@ Write down project parameters:<br>
 When working in VM opened in browser from GCP, credentials and authentication are done under the cover.
 
 #### Google SDK 
-When working from VM opend via Google Cloud Platform, Google SDK for Java and Python, are already installed.
+in already installed on the VM instance.
 
 ## Step 2. Create Project storage
 You need to create Buckets for data storage of the project.<br>
