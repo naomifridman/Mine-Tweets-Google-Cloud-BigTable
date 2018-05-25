@@ -41,6 +41,18 @@ import string
 str_prt='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~ \t\n\r\x0b\x0c'
 printable_chars = bytes(str_prt, 'ascii')
 word_tokenizer = RegexpTokenizer('[a-zA-Z]\w+')
+from bs4 import BeautifulSoup
+def my_print(s):
+    soup = BeautifulSoup(s)
+    #print('encode', soup.encode("utf-8"))
+    tmp = soup.encode("utf-8")
+    soup = BeautifulSoup(s, 'html.parser').encode("ascii")
+    if len(soup) > 0:
+        print(soup)
+    #print('decode', tmp.decode("utf-8"))
+def get_ascii(s):
+   soup = BeautifulSoup(s, 'html.parser').encode("ascii")
+   return soup 
 import re
 # match characters from ¿ to the end of the JSON-encodable range
 
@@ -91,8 +103,13 @@ def tw_get_tweets(api,  query_in, Qye_words, geo, location, num_tweets=200):
       try:
         
         tweet = cs.next()
-        #print(re.sub(r'a-zA-Z\W+', '', tweet.text))
-        #print('loc ',re.sub(r'\W+', '', tweet.author.location))
+        if (len(get_ascii(tweet.author.location)) == 0):
+              continue
+
+        #print('tweet text')
+        #my_print(tweet.text)
+        #print('authour location')
+        #my_print(tweet.author.location)
         #TWEET INFO
         created = tweet.created_at             #tweet created
         text    = tweet.text                   #tweet text
@@ -121,7 +138,8 @@ def tw_get_tweets(api,  query_in, Qye_words, geo, location, num_tweets=200):
         break
       except StopIteration:
         break
-		
+
+    print('	******************** counter of collected tweets: ', counter)	
     return word_list
 #===================================================================================================
 import sys
@@ -159,11 +177,12 @@ def get_tweets_words(location_words, query_in):
 	authfile = 'auth.k'
 	api = tw_oauth()
 
+	
 	#table, connection, column_name = create_BigTable_table(location_words[0])
 	words = tw_get_tweets(api,  query_in, [x.lower() for x in Qye_words],
 						  location = [x.lower() for x in location_words],
 						  geo = None,
-						  num_tweets=2000)
+						  num_tweets=80000)
 	
 	#connection.close()        		
 	df_city = pd.DataFrame(index = np.arange(0,len(words)), columns=[[fdir]],
@@ -173,7 +192,7 @@ def get_tweets_words(location_words, query_in):
 	df_city[fdir].to_csv(out_name, encoding='utf-8', index=False, header=False)
 
 	print(len(df_city), ' Words collected and saved in ', out_name)
-	
+	print(df_city.head())
 	return df_city
 #======================================================================================
 #===============   Global variables
@@ -184,7 +203,7 @@ query = '(Royal AND wedding) OR (wedding AND Meghan) OR (Harry AND wedding) OR (
 # lower case is enought, because we filter words in lower case
 Qye_words = word_tokenizer.tokenize(query.lower())
 
-location_list = [['NY'], ['London'], #, 'New York', 'Newyork'
+location_list = [['NY', 'Newyork', 'New York', 'newyork', 'NYC'], ['London'], #, 'New York', 'Newyork'
 				   ['Dublin'], ['Washington']]	
 
 #=======================================================================================
@@ -195,9 +214,11 @@ def count_and_sort_words(df):
     df_results =  []
     # lets count and sort words
     
-    #print('counting and sorting: ', col)
-    words = df[col].tolist()
+    
+    
+    words = df[df.columns[0]].tolist()
 
+    
     counts = Counter(words)
     word_list=[]
     freq_list=[]
@@ -207,8 +228,8 @@ def count_and_sort_words(df):
             word_list.append(item)
             freq_list.append(frequency)
 
-    df_results = pd.DataFrame({re.sub(r'\W+', '', str(col)) + '_words':word_list,
-                              re.sub(r'\W+', '',str(col)) + '_freq':freq_list})   
+    df_results = pd.DataFrame({re.sub(r'\W+', '', str(df.columns[0])) + '_words':word_list,
+                              re.sub(r'\W+', '',str(df.columns[0])) + '_freq':freq_list})   
     return df_results
 
 #=============================================================================================
@@ -241,10 +262,9 @@ if __name__ == '__main__':
     print()
 	
 
-	print('=======================================================================================')    
+    print('=======================================================================================')    
     print(df.head())
 
     df_results = count_and_sort_words(df.fillna(0))
   
-
-  print(df_results.head(10))
+    print(df_results.head(10))
