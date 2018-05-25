@@ -1,16 +1,8 @@
 #!/usr/bin/env python
 #
-# Code is small modification of this example:
+# Code is a modification of this example:
 #  https://github.com/GoogleCloudPlatform/python-docs-samples/tree/master/bigtable/hello_happybase
-#    
-# Demonstrates how to connect to Cloud Bigtable
-# Create table
-# insert list of words to the table
-# Prerequisites:
-#- Create a Cloud Bigtable cluster.
-#  https://cloud.google.com/bigtable/docs/creating-cluster
-#- Set your Google Application Default Credentials.
-#  https://developers.google.com/identity/protocols/application-default-credentials
+# print out n=100 rows from a BigTable table   
 #
 # usage: words_from_BigTable_tables_to_output.py [-h] [--table TABLE] project_id instance_id
 
@@ -38,7 +30,7 @@ def main(project_id, instance_id, table_name):
         table = connection.table(table_name)
 
         # [START scanning_all_rows]
-        print('Scanning all words in table: ', table_name)
+        print('Scanning words in table: ', table_name)
 
         
         column_name = '{fam}:words'.format(fam=column_family_name)
@@ -49,7 +41,9 @@ def main(project_id, instance_id, table_name):
             # Do your staff here with the words in the table...
             #
             # For simplycity, we just print them to stdout
-            print('\t{}: {}'.format(key, row[column_name.encode('utf-8')]))
+            print('raw format: ', '\t{}: {}'.format(key, row[column_name.encode('utf-8')]))
+            print('decoded format':, ' word: ', key.decode("utf-8"),  'count: ', int.from_bytes(row[b'cf:count'], byteorder='big'))
+            
         # [END scanning_all_rows]
 
         # [START deleting_a_table]
