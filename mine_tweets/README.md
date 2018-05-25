@@ -725,4 +725,12 @@ df_politics.head(10)
 </table>
 </div>
 
-
+## Twitter Tips
+### printing - causing problems due to charechter the Twitter createa.
+Worked for me only with the following:
+```
+from bs4 import BeautifulSoup
+def my_print(s):
+    soup = BeautifulSoup(s)
+    print(soup.encode("utf-8"))
+```
