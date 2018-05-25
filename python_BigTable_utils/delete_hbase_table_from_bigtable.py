@@ -1,18 +1,11 @@
 #!/usr/bin/env python
 #
-# Code is small modification of this example:
+# Code is a modification of this example:
 #  https://github.com/GoogleCloudPlatform/python-docs-samples/tree/master/bigtable/hello_happybase
 #    
-# Demonstrates how to connect to Cloud Bigtable
-# Create table
-# insert list of words to the table
-# Prerequisites:
-#- Create a Cloud Bigtable cluster.
-#  https://cloud.google.com/bigtable/docs/creating-cluster
-#- Set your Google Application Default Credentials.
-#  https://developers.google.com/identity/protocols/application-default-credentials
+# Demonstrates how to connect to Cloud Bigtable, and delete a table.
 #
-# usage: delete_HBase_table_from_BigTable.py [-h] [--table TABLE] project_id instance_id
+# usage: delete_hbase_table_from_bigtable.py [-h] [--table TABLE] project_id instance_id
 
 import argparse
 
@@ -39,7 +32,6 @@ def main(project_id, instance_id, table_name):
     print('Listing tables in Bigtable cluster: ', instance_id, ' after deleting')
     list_tables(connection)
 	
-
     connection.close()
 
 
