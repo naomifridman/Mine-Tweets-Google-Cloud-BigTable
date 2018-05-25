@@ -35,23 +35,11 @@ s_words = {'ourselves', 'hers', 'between', 'yourself', 'but', 'again', 'there', 
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk.tokenize import RegexpTokenizer
-
-import string
-#string.printable
-str_prt='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~ \t\n\r\x0b\x0c'
-printable_chars = bytes(str_prt, 'ascii')
 word_tokenizer = RegexpTokenizer('[a-zA-Z]\w+')
-import re
-# match characters from ¿ to the end of the JSON-encodable range
-
-
-#def isprintable(s):
-#   return all(char @in printable_chars for char in s)
 def tokenize_tweet_text(tweet_text, Qye_words = None):
     
     word_tokens = word_tokenizer.tokenize(tweet_text)
-    #for word in word_tokens:
-    #    if isprintable(word): print(word)
+    #print(word_tokens)
     filtered_sentence = []
 
     for w in word_tokens:
@@ -124,17 +112,6 @@ def tw_get_tweets(api,  query_in, Qye_words, geo, location, num_tweets=200):
 		
     return word_list
 #===================================================================================================
-import sys
-import os
-
-def ensure_dir(fdir):
-    #fdirectory = os.path.dirname(file_path)
-
-    #print('dir from file path',file_path, fdirectory)
-    if not os.path.exists(fdir):
-        print('Creating ', fdir, ' directory')
-        os.makedirs(fdir)
-#===================================================================================================
 import os
 import os.path
 import argparse
@@ -153,27 +130,20 @@ def get_tweets_words(location_words, query_in):
      
 	# output file - use first phrase of the given location 
 	fdir = location_words[0].replace(" ", "_")
-	ensure_dir(fdir)
+	
 	fname = 'tweets_from_' + fdir+'.txt'
 
 	authfile = 'auth.k'
 	api = tw_oauth()
 
-	#table, connection, column_name = create_BigTable_table(location_words[0])
 	words = tw_get_tweets(api,  query_in, [x.lower() for x in Qye_words],
 						  location = [x.lower() for x in location_words],
 						  geo = None,
-						  num_tweets=2000)
-	
-	#connection.close()        		
+						  num_tweets=20000)
+       		
 	df_city = pd.DataFrame(index = np.arange(0,len(words)), columns=[[fdir]],
 						 data=words)
-						 
-	out_name = os.path.join(fdir, fname)
-	df_city[fdir].to_csv(out_name, encoding='utf-8', index=False, header=False)
-
-	print(len(df_city), ' Words collected and saved in ', out_name)
-	
+						 	
 	return df_city
 #======================================================================================
 #===============   Global variables
@@ -184,9 +154,9 @@ query = '(Royal AND wedding) OR (wedding AND Meghan) OR (Harry AND wedding) OR (
 # lower case is enought, because we filter words in lower case
 Qye_words = word_tokenizer.tokenize(query.lower())
 
-location_list = [['NY'], ['London'], #, 'New York', 'Newyork'
+location_list = [['NY', 'New York', 'newyork', ], ['London'],
 				   ['Dublin'], ['Washington']]	
-
+df_results =  pd.DataFrame()
 #=======================================================================================
 from collections import Counter
 import re
@@ -194,32 +164,59 @@ def count_and_sort_words(df):
 
     df_results =  []
     # lets count and sort words
-    
-    #print('counting and sorting: ', col)
-    words = df[col].tolist()
+    for col in df.columns:
+       #print('counting and sorting: ', col)
+       words = df[col].tolist()
 
-    counts = Counter(words)
-    word_list=[]
-    freq_list=[]
+       counts = Counter(words)
+       word_list=[]
+       freq_list=[]
        
-    if (len(counts) > 0):
-        for item, frequency in counts.most_common(5):
-            word_list.append(item)
-            freq_list.append(frequency)
+       
+       for item, frequency in counts.most_common(10):
+           word_list.append(item)
+           freq_list.append(frequency)
 
-    df_results = pd.DataFrame({re.sub(r'\W+', '', str(col)) + '_words':word_list,
-                              re.sub(r'\W+', '',str(col)) + '_freq':freq_list})   
+       
+       if (i -- 0):
+           df_results = pd.DataFrame({re.sub(r'\W+', '', str(col)) + '_words':word_list,
+                              re.sub(r'\W+', '',str(col)) + '_freq':freq_list})
+           print('df create',df_results.head())
+       else:
+           df1 = pd.DataFrame({re.sub(r'\W+', '', str(col)) + '_words' : word_list,
+                              re.sub(r'\W+', '',str(col)) + '_freq':freq_list})
+           print('df1',df1.head())
+           df_results = pd.concat([df_results,df1], ignore_index=True, axis=1)
+
+           print(df_results.head())
+       df_results.fillna(0)
+          
+    df.fillna(0)
     return df_results
 
 #=============================================================================================
+# https://cloud.google.com/appengine/docs/standard/python/googlecloudstorageclient/read-write-to-cloud-storage
+def load_csv_to_bucket(df):
+  
+  # The call to get_default_gcs_bucket_name succeeds only if you have created the default bucket for your project.
+  bucket_name = os.environ.get('BUCKET_NAME',
+                               app_identity.get_default_gcs_bucket_name())
 
+  self.response.headers['Content-Type'] = 'text/plain'
+  self.response.write('Demo GCS Application running from Version: '
+                      + os.environ['CURRENT_VERSION_ID'] + '\n')
+  self.response.write('Using bucket name: ' + bucket_name + '\n\n')
+#=============================================================================================
+from subprocess import call
 if __name__ == '__main__':
-
+  n_times=1
+  df = []
+  for i in range(n_times):
     
     parser = argparse.ArgumentParser(
         description=__doc__,
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('-n', '--locations', nargs='+', default=location_list[0], help = " (default location: %(default)s)")
+    parser.add_argument('-n', '--locations', nargs='+', default=location_list[i], help = " (default location: %(default)s)")
     parser.add_argument('-q', '--about',  default=query, help = " (default Query: %(default)s)")
     args = parser.parse_args()
     #print('args',args, args.about, 'len',len(args.about))
@@ -230,21 +227,28 @@ if __name__ == '__main__':
     print('args.locations', args.locations)
     query_list = args.locations
     print('query', query, 'Qye_words',Qye_words)
-    
     df = get_tweets_words(args.locations, args.about)
-    
-    df.fillna(0)
     print()
     print()
     print('Most Popular words in Tweets about:')
     print(query)
     print()
-	
-
-	print('=======================================================================================')    
+    
     print(df.head())
-
-    df_results = count_and_sort_words(df.fillna(0))
-  
+    
+    csv_file = df.to_csv('tweet_words.txt', sep=' ', index=False, header=False)
+    #os.system("gsutil cp tweet_words.txt gs://naomi-bucket")
+      
+	  
+    '''
+    run_job = 'gcloud dataproc jobs submit hadoop --cluster naomi-mapreduce-bigtable \
+    --jar target/wordcount-mapreduce-1.0-jar-with-dependencies.jar \
+    -- wordcount-hbase \
+    gs://naomi-bucket/tweet_words.txt \
+    "tweet-words-count"
+  #os.system(run_job)
+  '''
+  df_results = count_and_sort_words(df.fillna(0))
+  print('=======================================================================================')
 
   print(df_results.head(10))
