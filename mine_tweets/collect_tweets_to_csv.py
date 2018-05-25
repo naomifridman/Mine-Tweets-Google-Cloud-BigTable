@@ -35,11 +35,35 @@ s_words = {'ourselves', 'hers', 'between', 'yourself', 'but', 'again', 'there', 
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk.tokenize import RegexpTokenizer
+
+import string
+#string.printable
+str_prt='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~ \t\n\r\x0b\x0c'
+printable_chars = bytes(str_prt, 'ascii')
 word_tokenizer = RegexpTokenizer('[a-zA-Z]\w+')
+from bs4 import BeautifulSoup
+def my_print(s):
+    soup = BeautifulSoup(s)
+    #print('encode', soup.encode("utf-8"))
+    tmp = soup.encode("utf-8")
+    soup = BeautifulSoup(s, 'html.parser').encode("ascii")
+    if len(soup) > 0:
+        print(soup)
+    #print('decode', tmp.decode("utf-8"))
+def get_ascii(s):
+   soup = BeautifulSoup(s, 'html.parser').encode("ascii")
+   return soup 
+import re
+# match characters from ¿ to the end of the JSON-encodable range
+
+
+#def isprintable(s):
+#   return all(char @in printable_chars for char in s)
 def tokenize_tweet_text(tweet_text, Qye_words = None):
     
     word_tokens = word_tokenizer.tokenize(tweet_text)
-    #print(word_tokens)
+    #for word in word_tokens:
+    #    if isprintable(word): print(word)
     filtered_sentence = []
 
     for w in word_tokens:
@@ -65,8 +89,8 @@ def tw_get_tweets(api,  query_in, Qye_words, geo, location, num_tweets=200):
     
     
     
-    print('query_in', query_in)
-    print('location', location)
+    #print('query_in', query_in)
+    #print('location', location)
     # We will not use geocode inorder not to miss most of the tweets.
     cs = tweepy.Cursor(api.search,
                                 q = query_in,           # the actual words we search
@@ -79,8 +103,13 @@ def tw_get_tweets(api,  query_in, Qye_words, geo, location, num_tweets=200):
       try:
         
         tweet = cs.next()
-        print(re.sub(r'a-zA-Z\W+', '', tweet.text))
-        print('loc ',re.sub(r'\W+', '', tweet.author.location))
+        if (len(get_ascii(tweet.author.location)) == 0):
+              continue
+
+        #print('tweet text')
+        #my_print(tweet.text)
+        #print('authour location')
+        #my_print(tweet.author.location)
         #TWEET INFO
         created = tweet.created_at             #tweet created
         text    = tweet.text                   #tweet text
@@ -97,8 +126,8 @@ def tw_get_tweets(api,  query_in, Qye_words, geo, location, num_tweets=200):
         #print('location_token', location_token)
         
         if any(word.lower() in location_token for word in location):
-            print('text', word_tokenizer.tokenize(text))
-            print('location', word_tokenizer.tokenize(authorloc))
+            #print('text', word_tokenizer.tokenize(text))
+            #print('location', word_tokenizer.tokenize(authorloc))
             word_list += tokenize_tweet_text(text, Qye_words = Qye_words)
 
         counter = counter +1
@@ -109,7 +138,8 @@ def tw_get_tweets(api,  query_in, Qye_words, geo, location, num_tweets=200):
         break
       except StopIteration:
         break
-		
+
+    print('	******************** counter of collected tweets: ', counter)	
     return word_list
 #===================================================================================================
 import sys
@@ -147,25 +177,12 @@ def get_tweets_words(location_words, query_in):
 	authfile = 'auth.k'
 	api = tw_oauth()
 
+	
 	#table, connection, column_name = create_BigTable_table(location_words[0])
 	words = tw_get_tweets(api,  query_in, [x.lower() for x in Qye_words],
 						  location = [x.lower() for x in location_words],
 						  geo = None,
-						  num_tweets=200)
-
-	# create_BigTable_table(project_id, instance_id, table_name)
-	#project_id = os.environ['PROJECT_ID']
-	#instance_id = os.environ['INSTANCE_ID']
-
-	
-	# add words to Base table
-        
-	for i, value in enumerate(words):
-
-		#print('inserting ', i, value)
-		row_key = 'row_{}'.format(i)
-		#table.put(row_key, {column_name: value})
-
+						  num_tweets=80000)
 	
 	#connection.close()        		
 	df_city = pd.DataFrame(index = np.arange(0,len(words)), columns=[[fdir]],
@@ -175,54 +192,55 @@ def get_tweets_words(location_words, query_in):
 	df_city[fdir].to_csv(out_name, encoding='utf-8', index=False, header=False)
 
 	print(len(df_city), ' Words collected and saved in ', out_name)
-	
+	print(df_city.head())
 	return df_city
 #======================================================================================
 #===============   Global variables
 # build a query with logic operators
-query = '(Royal AND wedding) OR (wedding AND Meghan) OR (Harry AND wedding)'
+query = '(Royal AND wedding) OR (wedding AND Meghan) OR (Harry AND wedding) OR (Harry AND Meghan)'
 
 # list of words that we don't want to count, because they are part of the query
 # lower case is enought, because we filter words in lower case
 Qye_words = word_tokenizer.tokenize(query.lower())
 
-location_list = [['NY', 'New York', 'newyork', ], ['London'],
+location_list = [['NY', 'Newyork', 'New York', 'newyork', 'NYC'], ['London'], #, 'New York', 'Newyork'
 				   ['Dublin'], ['Washington']]	
-df_results =  pd.DataFrame()
+
 #=======================================================================================
 from collections import Counter
 import re
 def count_and_sort_words(df):
 
+    df_results =  []
     # lets count and sort words
-    for col in df.columns:
-       #print('counting and sorting: ', col)
-       words = df[col].tolist()
-
-       counts = Counter(words)
-       word_list=[]
-       freq_list=[]
     
-       if (len(counts) > 0):
-           for item, frequency in counts.most_common(10):
-               word_list.append(item)
-               freq_list.append(frequency)
+    
+    
+    words = df[df.columns[0]].tolist()
 
+    
+    counts = Counter(words)
+    word_list=[]
+    freq_list=[]
+       
+    if (len(counts) > 0):
+        for item, frequency in counts.most_common(5):
+            word_list.append(item)
+            freq_list.append(frequency)
 
-           df_results[re.sub(r'\W+', '', str(col)) + '_words'] = word_list
-           df_results[re.sub(r'\W+', '',str(col)) + '_freq'] = freq_list  
-    print(df_results.head(10))
+    df_results = pd.DataFrame({re.sub(r'\W+', '', str(df.columns[0])) + '_words':word_list,
+                              re.sub(r'\W+', '',str(df.columns[0])) + '_freq':freq_list})   
+    return df_results
+
 #=============================================================================================
 
 if __name__ == '__main__':
-  n_times=2
-  df = []
-  for i in range(n_times):
+
     
     parser = argparse.ArgumentParser(
         description=__doc__,
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('-n', '--locations', nargs='+', default=location_list[i], help = " (default location: %(default)s)")
+    parser.add_argument('-n', '--locations', nargs='+', default=location_list[0], help = " (default location: %(default)s)")
     parser.add_argument('-q', '--about',  default=query, help = " (default Query: %(default)s)")
     args = parser.parse_args()
     #print('args',args, args.about, 'len',len(args.about))
@@ -233,18 +251,20 @@ if __name__ == '__main__':
     print('args.locations', args.locations)
     query_list = args.locations
     print('query', query, 'Qye_words',Qye_words)
-    if (i==0):
-        df = get_tweets_words(args.locations, args.about)
-    else:
-        df1 = get_tweets_words(args.locations, args.about)
-        df = pd.concat([df, df1], axis=1)
+    
+    df = get_tweets_words(args.locations, args.about)
+    
+    df.fillna(0)
     print()
     print()
     print('Most Popular words in Tweets about:')
     print(query)
     print()
-    
+	
+
+    print('=======================================================================================')    
     print(df.head())
 
-  print('=======================================================================================')
-  count_and_sort_words(df)
+    df_results = count_and_sort_words(df.fillna(0))
+  
+    print(df_results.head(10))
