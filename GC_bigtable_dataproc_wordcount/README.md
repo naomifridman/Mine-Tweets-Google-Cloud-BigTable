@@ -605,7 +605,7 @@ b'bridesmaids' 3
 Step 9. Compare Tweets in different locations
 Just for fun of comparing, a poorly written script is added that run all the process in a loop on different locations, and presets results for each location. Run with default query and location:
 ```
-run_if_all_together.py
+run_if_all_on_gc.py
 ```
 You can get for example:
 ```
@@ -622,6 +622,35 @@ You can get for example:
 3            1       record
 4            1     princess
 ```
+Another example, with 4 locations:
+```
+python3 run_it_all.py -q "trump"
+```
+Output:
+```
+Folllowing words will be not counted:  ['trump']
+args.locations ['NY', 'New York', 'newyork']
+Retreiving tweets since:  2018-4-26  about: 
+trump
+Tweeted in locations:  NY
+
+
+Example of words in Tweets about:
+trump
+
+             NY
+0    ok_dumbass
+1        tparsi
+2   bradmossesq
+3       bungdan
+4  richardengel
+... mapreduce wordcount...
+     NY_freq        NY_words
+0        4           b'co'
+1        4        b'takei'
+2        3           b're'
+3        2  b'accusations'
+4        2        b'clear'
 // TODO
 Twitter response is not always reliable. To get more clean tweets, run in a loop on time lap of 15 minutes, and handle all exceptions.
 ## Clean up
