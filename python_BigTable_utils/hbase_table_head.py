@@ -1,12 +1,11 @@
 #!/usr/bin/env python
 #
-# Code is small modification of this example:
+# Code is a modification of this example:
 #  https://github.com/GoogleCloudPlatform/python-docs-samples/tree/master/bigtable/hello_happybase
 #    
-# Demonstrates how to connect to Cloud Bigtable, and print few first rows.
+# Demonstrates how to connect to Cloud Bigtable, and printout 40 rows
 #
-# usage: hbase_table_head.py [-h] [--table TABLE] project_id instance_id
-
+# usage: python hbase_table_head.py [-h] [--table TABLE] project_id instance_id
 import argparse
 
 from google.cloud import bigtable
@@ -15,7 +14,8 @@ from google.cloud import happybase
 
 def main(project_id, instance_id, table_name):
     # [START connecting_to_bigtable]
-    # The client must be created with admin=True because it will create atable.
+    # The client must be created with admin=True because it will create a
+    # table.
     client = bigtable.Client(project=project_id, admin=True)
     instance = client.instance(instance_id)
     connection = happybase.Connection(instance=instance)
@@ -30,20 +30,20 @@ def main(project_id, instance_id, table_name):
         table = connection.table(table_name)
 
         # [START scanning_all_rows]
-        print('Scanning 10 rows from table: ', table_name)
+        print('Scanning all words in table: ', table_name)
 
         
         column_name = '{fam}:count'.format(fam=column_family_name)
         print('column_name ', column_name)
 		
         i = 0
-        for key, row in table.scan(limit=10):
-           
-            
+        for key, row in table.scan(limit=40):
+ 
+            i += 1
+    
             print(i, ' word: ', key.decode("utf-8"),  'count: ', int.from_bytes(row[b'cf:count'], byteorder='big'))
-	    i += 1
             
-        # [END scanning rows]
+        # [END scanning_all_rows]
 
         # [START deleting_a_table]
         #print('Deleting the {} table.'.format(table_name))
