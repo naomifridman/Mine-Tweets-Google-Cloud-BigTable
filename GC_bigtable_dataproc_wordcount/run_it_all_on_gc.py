@@ -142,7 +142,7 @@ def get_tweets_words(location_words, query_in):
 	words = tw_get_tweets(api,  query_in, [x.lower() for x in Qey_words],
 						  location = [x.lower() for x in location_words],
 						  geo = None,
-						  num_tweets=80000)
+						  num_tweets=2000)
        		
 	df_city = pd.DataFrame(index = np.arange(0,len(words)), columns=[[fdir]],
 						 data=words)
@@ -179,18 +179,18 @@ from google.cloud import happybase
 
 def get_max_val(table, no_keyes):
     
-    key_max = None
-    val_max = None
+    key_max = ''
+    val_max = 0
     i = 0
     for key, row in table.scan():
         if (key not in no_keyes):
             val = int.from_bytes(row[b'cf:count'], byteorder='big')
             #print(i, ' word: ', key.decode("utf-8"),  'count: ', int.from_bytes(row[b'cf:count'], byteorder='big'))
             if (val > i):
-                Key_max = key
+                key_max = key.decode("utf-8")
                 val_max = val
                 i = val
-    return Key_max, val_max
+    return key_max, val_max
 #======================================================================================
 def get_top5_freq_words(project_id, instance_id, table_name):
     # [START connecting_to_bigtable]
@@ -200,6 +200,8 @@ def get_top5_freq_words(project_id, instance_id, table_name):
     instance = client.instance(instance_id)
     connection = happybase.Connection(instance=instance)
     # [END connecting_to_bigtable]
+    keys = []
+    vals = []
 
     try:
         # [START creating_a_table]
@@ -218,8 +220,7 @@ def get_top5_freq_words(project_id, instance_id, table_name):
 		
         max_val = 0
         max_key = None
-        keys = []
-        vals = []
+        
         for i in range(5):
             max_val = 0
             max_key = None
@@ -263,28 +264,26 @@ if __name__ == '__main__':
     
     print(df.head())
     
-    fname = 'tweet_words' + str(i) +'.txt'
-    print('Twitter words are saved into: ', fname)
+    #fname = 'tweet_words' + str(i) +'.txt'
+    #print('Twitter words are saved into: ', fname)
     csv_file = df.to_csv('tweet_words.txt', sep=' ', index=False, header=False)
-    fjob = 'gsutil cp ' + fname + ' gs://naomi-bucket'
-    print('running : ', fjob)
-    os.system("gsutil rm  -f tweet_words.txt gs://naomi-bucket/tweet/tweet_words.txt")
+    #fjob = 'gsutil cp ' + fname + ' gs://naomi-bucket'
+    #print('running : ', fjob)
+    print('Running: gsutil ls -l gs://naomi-bucket/tweet')
+    os.system('gsutil ls -l gs://naomi-bucket/tweet')
+    print('Running: gsutil rm  -f  gs://naomi-bucket/tweet/*')
+    os.system("gsutil rm  -f  gs://naomi-bucket/tweet/tweet_words.txt")
+    print('Running: gsutil cp tweet_words.txt gs://naomi-bucket/tweet')
     os.system("gsutil cp tweet_words.txt gs://naomi-bucket/tweet")  
     #os.system(fjob)
-    @print(fname, ' is uploaded to gs://naomi-bucket')
-	
-    '''
-    run_job = 'gcloud dataproc jobs submit hadoop --cluster naomi-mapreduce-bigtable \
-    --jar target/wordcount-mapreduce-1.0-jar-with-dependencies.jar \
-    -- wordcount-hbase \
-    gs://naomi-bucket/tweet_words.txt \
-    \"tweet-words-count\"'
-    '''
-    
-    run_job = 'gcloud dataproc jobs submit hadoop --cluster naomi-mapreduce-bigtable \
-    --jar target/wordcount-mapreduce-1.0-jar-with-dependencies.jar \
-    -- wordcount-hbase \
-    gs://naomi-bucket/tweet/  \
+    #print(fname, ' is uploaded to gs://naomi-bucket')
+    print('Running: gsutil ls -l gs://naomi-bucket/tweet')
+    os.system('gsutil ls -l gs://naomi-bucket/tweet')
+   
+    run_job = '~/hadoop/bin/hadoop  \
+    jar target/wordcount-mapreduce-1.0-jar-with-dependencies.jar \
+     wordcount-hbase \
+      gs://naomi-bucket/tweet \
       \"tweet-words-count\"'
 	
     print('Running mapreduce job: ')
@@ -305,7 +304,7 @@ if __name__ == '__main__':
            df1 = pd.DataFrame({re.sub(r'\W+', '', str(args.locations[0])) + '_words' : keys,
                               re.sub(r'\W+', '',str(args.locations[0])) + '_freq':vals})
            #print('df1',df1.head())
-           #print('df_results', df_results)
+           #print('df_results', df.columns, args.locations[0])
            df_results = pd.concat([df_results,df1], ignore_index=True, axis=1)
 
            print('df_results after concat:', df_results.head())
