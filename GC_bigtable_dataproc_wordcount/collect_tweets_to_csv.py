@@ -213,9 +213,7 @@ def count_and_sort_words(df):
 
     df_results =  []
     # lets count and sort words
-    
-    
-    
+        
     words = df[df.columns[0]].tolist()
 
     
