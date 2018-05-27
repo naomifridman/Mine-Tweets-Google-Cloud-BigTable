@@ -639,19 +639,17 @@ b'thank' 9
 b'accepting' 9
 b'bridesmaids' 3
 ```
-Step 9. Compare Tweets in different locations
-Just for fun of comparing, a poorly written script is added that run all the process in a loop on different locations, and presets results for each location. Run with default query and location:
+## Step 9. Compare Tweets in different locations
+Just for fun of comparing, a poorly written script is added that run all the process in a loop on different locations, and presets results for each location. Example:
 ```
 run_it_all_on_gc.py -q "Trump"
 ```
 You can get for example:
 ```
+#-- python collecting tweets
  args.locations ['NY', 'New York', 'newyork']
-Retreiving tweets since:  2018-4-27  about: 
-trump
+Retreiving tweets since:  2018-4-27  about: trump
 Tweeted in locations:  NY
-
-
 Example of words in Tweets about:
 trump
 
@@ -661,6 +659,13 @@ trump
 2        house
 3      quietly
 4      granted
+#-- java mapreduce wordcount, counts the words of the twets
+df create    NY_freq   NY_words
+0        4  b'donald'
+1        4  b'hitler'
+2        3    b'didn'
+3        3   b'least'
+4        3     b'man'
 ```
 ## gsutils commands
 gsutil command are similar to regular linux comands. Few basic gsutils commands:
