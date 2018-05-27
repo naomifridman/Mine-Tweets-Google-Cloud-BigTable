@@ -89,7 +89,7 @@ gcloud dataproc clusters create "naomi-mapreduce-bigtable" \
     --master-machine-type n1-standard-2 \
     --worker-machine-type n1-standard-2
 ```
-Minimum workers for mapreduce are 2.
+*Minimum workers for mapreduce are 2.*<br>
 Or run with script:
 ```
 chmod a+x cluster.sh 
@@ -127,6 +127,13 @@ hadoop jar target/wordcount-mapreduce-1.0-jar-with-dependencies.jar  wordcount-h
 To test your Jar, you can run mapreduce on small local txt file:
 ```
 hadoop jar target/wordcount-mapreduce-1.0-jar-with-dependencies.jar  wordcount-hbase     small_file.txt  "words-count"
+```
+To test your GC setup, you can copy your small text file to bucket, and run mapreduc wordcount on your dataproc cluster:
+```
+gsutil cp  small_file.txt gs://naomi-bucket/tweet 
+gcloud dataproc jobs submit hadoop --cluster naomi-mapreduce-bigtable     --jar target/wordcount-mapreduce-1.0-jar-with-dependencies.jar     -- wordcount-hbase     gs://naomi-bucket/tweet    "test-words-count"
+# to check results run
+python3 hbase_table_head.py --table "test-words-count" naomi-topnwords naomi-mapreduce-bigtable
 ```
 On succsefull run, you should see somthing like:
 ```
@@ -213,7 +220,7 @@ Use the python utils from this git.
 ```
 cd
 cd Top-N-Words-In-Tweets-Google-Cloud/python_BigTable_utils/
-python hbase_table_head.py --table "words-count" naomi-topnwords naomi-mapreduce-bigtable
+python3 hbase_table_head.py --table "words-count" naomi-topnwords naomi-mapreduce-bigtable
 ```
 Output, in bytes:
 ```
@@ -227,7 +234,7 @@ Output, in bytes:
 ```
 $ python3 hbase_table_topn_by_value.py --table 'words-count' naomi-topnwords naomi-mapreduce-bigtable 
 ```
-Will outpoy:
+Will outpot:
 ```
 existing tables:  ['words-count']
 Scanning all words in table:  words-count
@@ -278,7 +285,7 @@ b'thank' 9
 b'accepting' 9
 b'bridesmaids' 3
 ```
-Step 9. Compare Tweets in different locations
+## Step 9. Compare Tweets in different locations
 Just for fun of comparing, a poorly written script is added that run all the proces in a loop on different locations, and presets results for each location. Run with default query and location:
 ```
 run_if_all_on_gc.py -q "Trump"
@@ -297,13 +304,19 @@ Example of words in Tweets about: Trump
 3          law
 4       exists
 # -- then mapreduce wordcount run on the file and produce:
-Scanning all words in table:  tweet-words-count
-column_name  cf:count
-b'preetbharara' 3
-b'th' 3
-b'co' 2
-b'dem' 2
-b'everything' 2
+NY_freq NY_words    London_frea London_words   
+3      people       3     people
+1      obama        2     children
+1      fabrication  2     ice
+1      policy       1     renedenfeld
+1      reminding    1     point
+#-- running with location Dublin ...
+NY_freq NY_words    London_frea London_words  Dublin_freq Dublin_words 
+3      people       3     people              3           upset
+1      obama        2     children            3           media
+1      fabrication  2     ice                 1           full
+1      policy       1     renedenfeld         1           bannon
+1      reminding    1     point               1           call
 ```
 // TODO
 Twitter respons is not always reliable. To get more clean tweets, run in a loop on time lap of 16 minutes, and handle all exceptions.
