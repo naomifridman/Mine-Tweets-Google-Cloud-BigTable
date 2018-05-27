@@ -119,7 +119,15 @@ gcloud dataproc jobs submit hadoop --cluster naomi-mapreduce-bigtable \
     gs://lesv-big-public-data/books/b6130 \
     "words-count"
 ```
-Where, gs://name are list of input public files, wordcount-hbase is the main class and last parameter is the output HBase table. In the original example jar file are saved in GC bucket, I changt it to local since I needed to examine it.
+Where, gs://name are list of input public files, wordcount-hbase is the main class and last parameter is the output HBase table. In the original example jar file are saved in GC bucket, I changt it to local since I needed to examine it.<br>
+The actual command that is running on the dataproc cluster is:
+```
+hadoop jar target/wordcount-mapreduce-1.0-jar-with-dependencies.jar  wordcount-hbase     gs://naomi-bucket/tweet/tweet_words.txt  "words-count"
+```
+To test your Jar, you can run mapreduce on small local txt file:
+```
+hadoop jar target/wordcount-mapreduce-1.0-jar-with-dependencies.jar  wordcount-hbase     small_file.txt  "words-count"
+```
 On succsefull run, you should see somthing like:
 ```
 - name: word count
@@ -273,22 +281,29 @@ b'bridesmaids' 3
 Step 9. Compare Tweets in different locations
 Just for fun of comparing, a poorly written script is added that run all the proces in a loop on different locations, and presets results for each location. Run with default query and location:
 ```
-run_if_all_together.py
+run_if_all_on_gc.py -q "Trump"
 ```
 You can get for example:
 ```
-   NY_freq  NY_words
-0       17         0
-1        1      give
-2        1  pb_curry
-3        1   address
-4        1     shout
-   London_freq London_words
-0            3           co
-1            1       nation
-2            1       school
-3            1       record
-4            1     princess
+#-- Python collect tweets about Trump in location NY
+Retreiving tweets since:  2018-4-27  about: Trump
+Tweeted in locations:  NY
+Example of words in Tweets about: Trump
+
+            NY
+0    shaunking
+1     complete
+2  fabrication
+3          law
+4       exists
+# -- then mapreduce wordcount run on the file and produce:
+Scanning all words in table:  tweet-words-count
+column_name  cf:count
+b'preetbharara' 3
+b'th' 3
+b'co' 2
+b'dem' 2
+b'everything' 2
 ```
 // TODO
 Twitter respons is not always reliable. To get more clean tweets, run in a loop on time lap of 16 minutes, and handle all exceptions.
@@ -380,6 +395,7 @@ You can give any unique name to the Bucket.
 Since it was tedious to configure the original example, I copied it to my git, and made some modifications.
 Clone mt modified example:
 ```
+cd
 git clone https://github.com/naomifridman/Top-N-Words-In-Tweets-Google-Cloud.git
 cd Top-N-Words-In-Tweets-Google-Cloud/GC_bigtable_dataproc_wordcount/
 #mvn clean package -Dbigtable.projectID=YOUR_PROJECT_ID -Dbigtable.instanceID=YOUR_INSTANCE_ID
@@ -395,6 +411,27 @@ You should see something like this:
 [INFO] Final Memory: 73M/753M
 [INFO] ------------------------------------------------------------------------
 ```
+### Comments about original example
+* Files `CellCounter.java` and `ValidateWordCount.java' are not used
+* Column family name is actually hard coded to cf<br>
+Although `WordCountHBase.java` are passing hard coded family column name:
+```
+ public static final byte[] COLUMN_FAMILY = "cf".getBytes();
+ public static final byte[] COUNT_COLUMN_NAME = "count".getBytes();
+
+CreateTable.createTable(tableName, conf,
+          Collections.singletonList(Bytes.toString(COLUMN_FAMILY)));
+```
+`CreateTable.java` dont use this parameter:
+```
+if (otherArgs.length != 1) {
+      System.err.println("Usage: <table-name>");
+      System.exit(2);
+    }
+
+    TableName tableName = TableName.valueOf(otherArgs[otherArgs.length - 1]);
+ ```
+ * maven create the Jar with dependecies and save it in your bucket. Since I had some issues with the compilation. and I needed to review Jar files, I change the pom.xml file to create the Jar localy in target directory.
 ## Step 4. Deploy MapReduce Example
 #### Create Google Cloud DataProc cluster
 This cluster, is the one actually running the jobs. We need to create DataProc cluster, with same name as the BigTable cluster, and same features as the VM you created.<br>
@@ -605,32 +642,12 @@ b'bridesmaids' 3
 Step 9. Compare Tweets in different locations
 Just for fun of comparing, a poorly written script is added that run all the process in a loop on different locations, and presets results for each location. Run with default query and location:
 ```
-run_if_all_on_gc.py
+run_it_all_on_gc.py -q "Trump"
 ```
 You can get for example:
 ```
-   NY_freq  NY_words
-0       17         0
-1        1      give
-2        1  pb_curry
-3        1   address
-4        1     shout
-   London_freq London_words
-0            3           co
-1            1       nation
-2            1       school
-3            1       record
-4            1     princess
-```
-Another example, with 4 locations:
-```
-python3 run_it_all.py -q "trump"
-```
-Output:
-```
-Folllowing words will be not counted:  ['trump']
-args.locations ['NY', 'New York', 'newyork']
-Retreiving tweets since:  2018-4-26  about: 
+ args.locations ['NY', 'New York', 'newyork']
+Retreiving tweets since:  2018-4-27  about: 
 trump
 Tweeted in locations:  NY
 
@@ -638,19 +655,23 @@ Tweeted in locations:  NY
 Example of words in Tweets about:
 trump
 
-             NY
-0    ok_dumbass
-1        tparsi
-2   bradmossesq
-3       bungdan
-4  richardengel
-... mapreduce wordcount...
-     NY_freq        NY_words
-0        4           b'co'
-1        4        b'takei'
-2        3           b're'
-3        2  b'accusations'
-4        2        b'clear'
+            NY
+0  repdonbeyer
+1        white
+2        house
+3      quietly
+4      granted
+```
+## gsutils commands
+gsutil command are similar to regular linux comands. Few basic gsutils commands:
+```
+# copy a file to storahe
+gsutil cp <file name> gs://bucket/subdir/
+# remove file from storage
+gsutil rm  -f  gs://naomi-bucket/tweet/tweet_words.txt
+# list files in bucket, or subdir in bucket
+gsutil ls -l  gs://naomi-bucket/tweet/
+```
 // TODO
 Twitter response is not always reliable. To get more clean tweets, run in a loop on time lap of 15 minutes, and handle all exceptions.
 ## Clean up
