@@ -162,5 +162,32 @@ virtualenv env
 source env/bin/activate
 #deactivate env
 ```
+## Step 11. Add Google Cloud storage to Python
+
+https://cloud.google.com/bigtable/docs/samples-python-hello-happybase<br>
+
+install python packages needed for working with BigTable:
+```
+pip install google-cloud-storage
+pip install google-cloud-happybase
+pip install google-cloud-dataproc
+```
+Now all needed Python libraries, should be installed.<br>
+To check, run:
+```
+$ pip freeze | grep google
+```
+You should see something like:
+```
+google-api-core==0.1.4
+google-auth==1.4.1
+google-cloud-bigtable==0.26.0
+google-cloud-core==0.26.0
+google-cloud-dataproc==0.1.0
+google-cloud-happybase==0.26.0
+google-cloud-storage==1.10.0
+google-cloud-vision==0.29.0
+google-gax==0.15.16
+google-resumable-media==0.3.1
+googleapis-common-protos==1.5.3
 You can also install needed packages as superuser with sudo. <br>
-Install Python libraries for Google cloud storage
