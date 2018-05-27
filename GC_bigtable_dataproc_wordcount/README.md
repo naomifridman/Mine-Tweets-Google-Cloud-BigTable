@@ -298,25 +298,25 @@ Tweeted in locations:  NY
 Example of words in Tweets about: Trump
 
             NY
-0    shaunking
-1     complete
-2  fabrication
-3          law
-4       exists
+0    b'shaunking
+1     b'complete
+2  b'fabrication
+3          b'law
+4       b'exists
 # -- then mapreduce wordcount run on the file and produce:
-NY_freq NY_words    London_frea London_words   
-3      people       3     people
-1      obama        2     children
-1      fabrication  2     ice
-1      policy       1     renedenfeld
-1      reminding    1     point
+NY_freq NY_words            London_frea London_words   
+3      b'administration       3     b'people
+1      b'obama                2     b'children
+1      b'fabrication          2     b'ice
+1      b'policy               1     b'renedenfeld
+1      b'reminding            1     b'point
 #-- running with location Dublin ...
-NY_freq NY_words    London_frea London_words  Dublin_freq Dublin_words 
-3      people       3     people              3           upset
-1      obama        2     children            3           media
-1      fabrication  2     ice                 1           full
-1      policy       1     renedenfeld         1           bannon
-1      reminding    1     point               1           call
+NY_freq NY_words         London_frea London_words  Dublin_freq Dublin_words 
+3      b'administration  3       b'people              3           b'upset
+1      b'obama             2     b'children            3           b'media
+1      b'fabrication       2     b'ice                 1           b'full
+1      b'policy            1     b'renedenfeld         1           b'bannon
+1      b'reminding         1     b'point               1           b'call
 ```
 // TODO
 Twitter respons is not always reliable. To get more clean tweets, run in a loop on time lap of 16 minutes, and handle all exceptions.
