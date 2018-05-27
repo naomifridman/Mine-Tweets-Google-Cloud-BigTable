@@ -30,17 +30,17 @@ Query should be written according to Twitter format. Mo processing is done on th
 Script is running on 4 locations, you can change it in source, by changing n_time varible.<br>
 Results example, for query: (Royal AND wedding) OR (wedding AND Meghan) OR (Harry AND wedding)
 ```
-      NY_words  NY_freq London_words  London_freq
-0         love       27     prince             16
-1        white        5       markle            8
-2       prince        5      youtube            7
-3        house        4   everything            5
-4       markle        4   qfpbyngknq            5
-5        trump        3         find            5
-6     pb_curry        2         love            5
-7           go        2    beautiful            5
-8       newday        2         went            5
-9  independent        2       really            5
+      NY_words  NY_freq 
+0         love       27
+1        white        5  
+2       prince        5 
+3        house        4
+4       markle        4 
+5        trump        3 
+6     pb_curry        2  
+7           go        2  
+8       newday        2  
+9  independent        2  
 ```
 # Python Notebook
 
