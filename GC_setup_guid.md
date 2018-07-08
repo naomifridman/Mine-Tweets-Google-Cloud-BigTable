@@ -23,16 +23,6 @@ GCP menu -> Billing<br>
 **Pay attention: choose "Individual" in account type !**<br>
 Insert you credit card, accept terms of service.<br>
 **Prepaid credit cards are not acceptable**<br>
-3. Enable the Google Cloud APIs needed for this example<br>
-GCP menu->API & Services->Dushboard<br>
-Make sure your project is selected<br>
-You get a page with long list of applications. Chose the APIs needed for this Project, and enable the one by one.<br>
-For this MapReduce example, you need to Enable:
-* Compute Engine API
-* Cloud BigTable API
-* Cloud BigTable Table Admin API
-* Google Cloud DataProc API
-* Cloud BigTable Admin API
 
 ## Step 2. Create VM Instance
 Here you create an instance, and from its SSH you will run the project.<br>
@@ -50,7 +40,7 @@ Reference: https://cloud.google.com/iam/docs/quickstart
 * In IMA page, make sure your project is selected
 * Add yourself as member, Choose owner type.
 * Choose edit in member menu, and get dialog to add roles. Add the following Roles: 
-* ##*App Engine Admin
+* App Engine Admin
 * Project Billing Manager
 * BigTable Administrator
 * Compute Admin
