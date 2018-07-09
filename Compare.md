@@ -1,10 +1,10 @@
-In this section i would compare the use of docker and streaming using mongodb to mapreduce and rest API using cloud bucket:  
+In my Google Cloud toy project, I expirienced many platform and tools. Here is a short summary of comparing the projects.
 
-| compare item  | BigTable VM | MongoDB Docker |
+| Item  | BigTable VM | MongoDB Docker |
 | ------------- | ------------- | ------------- |
 |  Twitter API | REST  | Stream  |
-|  DB | BigTable, Hbase  | MongoDB  |
-|  DB Location | Cloud bucket  | mLab |
+|  DataBase | BigTable, Hbase  | MongoDB , pymongo |
+|  DataBase Provaider | Google Cloud  | mLab |
 |  Map Reduce | Hadoop  | Kubernetes |
 |  Results obtained | 5 top words for one location  | a collection of word freq by location  |
 |  Running time for both systems  | ¬5 min as we reset the bucket | 100 relevant twitts / min  |
