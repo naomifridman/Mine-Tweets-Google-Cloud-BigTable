@@ -16,7 +16,7 @@ https://github.com/GoogleCloudPlatform/cloud-bigtable-examples/tree/master/java/
 Since I found deploying and running this example, take longer then expected, I forked the example to my git, made some small modifications. At first step, I run mapreduce wordcount on public files stored on GC storage.<br>
 Next step, is runing a Python script to mine Tweets about certain subject, and filter them by location, The tweet words, saved in txt file, which uploaded to Google Cloud storage.<br>
 In the last step, a Python utility is used to read the HBase table created by wordcount mapreduce, and find the hioghest requency words in the table<br>
-## python_BigTable_utils
+## Python_BigTable_utils
 Set of simple Python utilities to access and manage **HBase** table data with **Happybase** Python client. Utilities are:
 * **delete_hbase_table_from_bigtable.py** - connect to Cloud Bigtable, and delete a table.
 * **hbase_table_head.py** - connect to Cloud Bigtable, and print few first rows.
