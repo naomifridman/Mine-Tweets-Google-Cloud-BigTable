@@ -1,6 +1,6 @@
 # Python and Java Project on Google Cloud with BigTable and DataProc
 As a data scientists, in constant need of computation resources, I started my tour in Google cloud with fun application that mine Twitter and run Java MapReduce on the retrived data. <br>
-## GC_setup_guid.md
+## Google_Cloud_setup.md
 Complete Begginer guide to set up a Java Python project on Google Cloud Platform, with creation of all needed resources.
 Steps are:
 * Create Google Cloud account (choose "Individual"), enable billing and Google Cloud APIs
@@ -10,7 +10,7 @@ Steps are:
 * initilize project parameters with: `gcloud init`
 * Install Java, Haddop, Maven
 * Install Python, and Python clients for Google Cloud storage.
-## GC_bigtable_dataproc_wordcount
+## MapReduce_Hadoop_BigTable_DataProc
 We start with running the famous  MapReduce WordCount BigTable DataProc example:<br>
 https://github.com/GoogleCloudPlatform/cloud-bigtable-examples/tree/master/java/dataproc-wordcount<br>
 Since I found deploying and running this example, take longer then expected, I forked the example to my git, made some small modifications. At first step, I run mapreduce wordcount on public files stored on GC storage.<br>
