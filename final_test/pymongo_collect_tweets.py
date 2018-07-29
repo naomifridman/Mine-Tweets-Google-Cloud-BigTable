@@ -19,9 +19,9 @@ from tweepy import Stream
 
 ### database parameters
 dbuser = 'test'
-dbpassword = 'nnnn1858'
+dbpassword = '*******'
 dbname = 'python_twitter'
-host = 'ds121861.mlab.com'
+host = '******.mlab.com'
 port = 21861
 #-----------------------------------------------------------------------
 # util functions
@@ -99,10 +99,10 @@ def get_notTaken_location_and_keys(db):
 #----------------------------------------------------------------
 '''
 TWITTER_VAR = {
-    "consumer_key": u'ZSmlxcmobz32HKzL2w8MtFKt2',
-    "consumer_secret": u'IIuYGyQIBthbwadzXQjLjYAie6DgogbY1GuU4rpo7Ab21lCVWS',
-    "access_token": u'338343863-H2rz5dItEJX4pq9lYBjEVCeE8Q8GfMWWRgiMGNkZ',
-    "access_token_secret": u'3TB7TYqRjZvrclUYhZWhlEI8kfAt9vEFlXz9BcS7gKAUp'}
+    "consumer_key": ****',
+    "consumer_secret": ****',
+    "access_token": ****',
+    "access_token_secret": ****'}
 '''	
 nltk.download('stopwords')
 STOP_WORDS = ['ourselves', 'hers', 'between', 'yourself', 'but', 'again', 'there', 'about',
@@ -180,10 +180,10 @@ class StdOutListener(tweepy.StreamListener):
 ###############################################################################
 # main
 ###############################################################################
-consumer_key=u'ZSmlxcmobz32HKzL2w8MtFKt2'
-consumer_secret= u'IIuYGyQIBthbwadzXQjLjYAie6DgogbY1GuU4rpo7Ab21lCVWS'
-access_token= u'338343863-H2rz5dItEJX4pq9lYBjEVCeE8Q8GfMWWRgiMGNkZ'
-access_token_secret=u'3TB7TYqRjZvrclUYhZWhlEI8kfAt9vEFlXz9BcS7gKAUp'
+consumer_key=u'****'
+consumer_secret= u'****'
+access_token= u'****'
+access_token_secret=u'****'
 track_words=['worldcup']
 
 def main(args):
